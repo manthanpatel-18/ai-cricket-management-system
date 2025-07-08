@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Team Manager - Home</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Your Custom CSS (can be moved to style.css) -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
+    <style>
+        :root {
+            --primary-color: #1a2a40; /* Deep Blue */
+            --secondary-color: #00a65a; /* Cricket Green */
+            --accent-color: #f39c12; /* Orange/Gold Accent */
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --text-muted-dark: rgba(255, 255, 255, 0.7);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: rgba(26, 42, 64, 0.9); /* Slightly transparent primary */
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--secondary-color) !important; /* Green Brand */
+        }
+        .navbar-nav .nav-link {
+            color: var(--light-color) !important;
+            font-weight: 400;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--dark-color) !important;
+            background-color: var(--secondary-color);
+        }
+
+
+        /* Hero Section Styles */
+        .hero-section {
+            /* Replace with a real cricket background image URL */
+            background: linear-gradient(rgba(26, 42, 64, 0.85), rgba(26, 42, 64, 0.95)), url('https://via.placeholder.com/1920x600/1a2a40/ffffff?text=Cricket+Stadium+Background') no-repeat center center;
+            background-size: cover;
+            padding: 100px 0; /* Increased padding */
+            margin-bottom: 50px; /* Increased margin */
+            position: relative;
+            overflow: hidden;
+            color: var(--light-color);
+            border-bottom: 5px solid var(--secondary-color);
+        }
+        .hero-section h1 {
+            font-size: 3.5rem; /* Larger heading */
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero-section p.lead {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            font-weight: 300;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            animation: fadeInUp 1.5s ease-out;
+        }
+        .hero-section .auth-links {
+            animation: fadeInUp 2s ease-out;
+        }
+
+        /* Button Styles */
+        .btn {
+             border-radius: 25px; /* Pill shape */
+             padding: 10px 25px;
+             font-weight: 600;
+             transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.3s ease, border-color 0.3s ease;
+             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+             border: 2px solid transparent;
+        }
+        .btn-primary {
+            background-color: var(--secondary-color); /* Green Button */
+            border-color: var(--secondary-color);
+            color: var(--dark-color); /* Dark text on green */
+        }
+        .btn-primary:hover {
+            background-color: #008c4a; /* Darker Green */
+            border-color: #008c4a;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 166, 90, 0.4); /* Green shadow */
+             color: var(--dark-color);
+        }
+        .btn-outline-primary {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--secondary-color);
+            color: var(--dark-color); /* Dark text on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 166, 90, 0.3);
+        }
+        .btn:active {
+            transform: translateY(-1px);
+             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Featured Teams Section */
+         .container h2 {
+            font-weight: 700;
+            color: var(--secondary-color); /* Green heading */
+            margin-bottom: 40px; /* More space below heading */
+         }
+
+        /* Card Styling */
+        .card.team-card {
+            background-color: var(--primary-color); /* Dark card background */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            overflow: hidden; /* Ensure content fits rounded corners */
+            cursor: pointer;
+            margin-bottom: 30px; /* Spacing between cards */
+        }
+        .card.team-card:hover {
+            transform: translateY(-8px) scale(1.02); /* More pronounced hover */
+            box-shadow: 0 8px 25px rgba(0, 166, 90, 0.3); /* Green glow effect */
+            border-color: var(--secondary-color);
+        }
+        .card-body {
+            padding: 25px;
+            opacity: 0; /* Keep initial animation state */
+            transform: translateY(20px);
+            animation: fadeInUpCard 0.6s forwards; /* Renamed animation */
+            color: var(--light-color);
+        }
+        .card-body.visible { /* Keep JS logic */
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .team-logo {
+            height: 100px; /* Slightly smaller */
+            width: 100px;
+            object-fit: contain; /* Use contain to prevent stretching */
+            margin-bottom: 20px;
+            border-radius: 50%; /* Circular logos */
+            background-color: rgba(255, 255, 255, 0.1); /* Subtle background for logo area */
+            padding: 5px;
+            border: 2px solid var(--secondary-color);
+        }
+        .logo-placeholder {
+            height: 100px;
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 0 auto 20px auto; /* Center placeholder */
+            border-radius: 50%; /* Circular placeholder */
+            border: 2px dashed var(--secondary-color); /* Dashed border */
+        }
+        .logo-placeholder .fa-cricket-bat-ball { /* Font Awesome icon */
+            font-size: 40px;
+            color: var(--secondary-color);
+        }
+         .card-title {
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: var(--light-color);
+            margin-bottom: 10px;
+         }
+         .card-text {
+            color: var(--text-muted-dark);
+            font-size: 0.95rem;
+         }
+
+        /* Modal Styles */
+        .modal-content {
+             background-color: var(--primary-color);
+             color: var(--light-color);
+             border: 1px solid var(--secondary-color);
+             border-radius: 10px;
+        }
+        .modal-header {
+             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+         .modal-header .modal-title {
+             color: var(--secondary-color); /* Green title */
+             font-weight: 600;
+         }
+        .btn-close {
+             filter: invert(1) grayscale(100%) brightness(200%); /* Make close button white */
+        }
+        .modal-body h6 {
+            font-weight: 600;
+            color: var(--light-color);
+        }
+        .modal-body ul {
+             list-style: none;
+             padding-left: 0;
+        }
+        .modal-body ul li {
+             display: flex;
+             align-items: center;
+             margin-bottom: 15px;
+             background-color: rgba(255, 255, 255, 0.05);
+             padding: 10px;
+             border-radius: 5px;
+        }
+        .modal-body ul li img {
+            width: 45px; /* Slightly smaller */
+            height: 45px;
+            border-radius: 50%; /* Circular member pics */
+            margin-right: 15px;
+            object-fit: cover;
+             border: 1px solid var(--secondary-color);
+        }
+         .modal-footer {
+             border-top: 1px solid rgba(255, 255, 255, 0.2);
+         }
+         .btn-secondary { /* Style modal close button */
+            background-color: #6c757d;
+            border-color: #6c757d;
+         }
+          .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+             transform: translateY(-2px); /* Subtle hover */
+          }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--primary-color);
+            padding: 25px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted-dark);
+        }
+        footer p {
+            margin-bottom: 0;
+        }
+
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUpCard { /* Specific for cards */
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Add a slight delay to card animation based on position (optional) */
+        {% for team in teams %}
+        .col-md-4:nth-child({{ loop.index }}) .card-body {
+            animation-delay: {{ loop.index * 0.1 }}s;
+        }
+        {% endfor %}
+
+
+        .modal.fade .modal-dialog { /* Keep modal fade */
+            transform: translateY(-50px);
+            transition: transform 0.3s ease-out;
+        }
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+        }
+
+        /* General Styles */
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #00c768; /* Lighter green on hover */
+        }
+
+        .alert-info {
+             background-color: rgba(0, 166, 90, 0.1); /* Greenish info */
+             border-color: rgba(0, 166, 90, 0.3);
+             color: var(--light-color);
+        }
+        /* Match Card Styling */
+        .match-vs {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .match-vs .team1, .match-vs .team2 {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--light-color);
+        }
+
+        .match-vs .vs-badge {
+            background-color: var(--accent-color);
+            color: var(--dark-color);
+            padding: 2px 10px;
+            border-radius: 15px;
+            margin: 8px 0;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .match-date {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Match Modal Styling */
+        .match-details {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .match-details .team-name {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .match-details .vs-badge {
+            background-color: var(--accent-color);
+            color: var(--dark-color);
+            padding: 2px 12px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .match-info {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+
+        .match-info p {
+            margin-bottom: 10px;
+        }
+
+        /* Add this to your style section */
+        .prediction-result {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .prediction-result .alert {
+            background-color: rgba(0, 166, 90, 0.15);
+            border-color: var(--secondary-color);
+            color: var(--light-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .predicted-team {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="100">
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-dark fixed-top"> <!-- Added fixed-top for effect -->
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}"><i class="fas fa-trophy me-2"></i>Sports Team Manager</a>
+             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section text-center">
+        <div class="container">
+            <h1>Welcome to Sports Team Manager</h1>
+            <p class="lead">Your ultimate hub for managing and viewing sports teams</p>
+            <div class="auth-links">
+                <a href="{{ url_for('register') }}" class="btn btn-primary me-2 shadow-lg">Register Now</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary shadow-lg">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Teams Section -->
+    <div class="container mt-5"> <!-- Added mt-5 -->
+        <h2 class="text-center mb-5">Featured Teams</h2> <!-- Increased mb -->
+
+        <div class="row justify-content-center">
+            {% for team in teams %}
+                <div class="col-lg-4 col-md-6 mb-4"> <!-- Adjusted grid for better spacing -->
+                    <div class="card team-card h-100" data-bs-toggle="modal" data-bs-target="#teamModal{{ team._id }}">
+                        <div class="card-body text-center">
+                            {% if team.team_logo %}
+                                <img src="{{ url_for('static', filename='uploads/' + team.team_logo) }}" alt="{{ team.team_name }}" class="team-logo">
+                            {% else %}
+                                <div class="logo-placeholder">
+                                    <!-- Using Font Awesome icon -->
+                                    <i class="fas fa-cricket-bat-ball"></i>
+                                </div>
+                            {% endif %}
+                            <h5 class="card-title">{{ team.team_name }}</h5>
+                            <p class="card-text">Captain: {{ team.captain_name }}</p>
+                            <small class="text-muted">Click to view members</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal for Team Members -->
+                <div class="modal fade" id="teamModal{{ team._id }}" tabindex="-1" aria-labelledby="teamModalLabel{{ team._id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered"> <!-- Centered modal -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="teamModalLabel{{ team._id }}">
+                                   <i class="fas fa-users me-2"></i> {{ team.team_name }} - Team Roster
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h6><i class="fas fa-user-shield me-2"></i>Captain: {{ team.captain_name }}</h6>
+                                <hr style="border-color: rgba(255,255,255,0.2);">
+                                <h6 class="mt-3 mb-3">Members:</h6>
+                                <ul>
+                                    {% for member in team.members %}
+                                    <li>
+                                         {% if member.profile_pic %}
+                                            <img src="{{ url_for('static', filename='uploads/' + member.profile_pic) }}" alt="{{ member.name }}" class="member-pic">
+                                        {% else %}
+                                            <!-- Placeholder if member has no pic -->
+                                            <img src="https://via.placeholder.com/45/6c757d/ffffff?text={{ member.name[0]|upper }}" alt="{{ member.name }}" class="member-pic">
+                                        {% endif %}
+                                        <span>{{ member.name }}</span>
+                                    </li>
+                                    {% else %}
+                                        <li>No members listed for this team.</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>No teams have been registered yet. Be the first!
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+         <!-- Upcoming Matches Section -->
+        <div class="container mt-5">
+            <h2 class="text-center mb-5">Upcoming Matches</h2>
+
+            <div class="row justify-content-center">
+                {% for match in matches %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card team-card h-100" data-bs-toggle="modal" data-bs-target="#matchModal{{ match._id }}">
+                            <div class="card-body text-center">
+                                <div class="match-vs">
+                                    <span class="team1">{{ match.team_name }}</span>
+                                    <span class="vs-badge">VS</span>
+                                    <span class="team2">{{ match.opponent_name }}</span>
+                                </div>
+                                <p class="card-text match-date">
+                                    <i class="far fa-calendar-alt me-2"></i>
+                                    {{ match.created_at.strftime('%d %b %Y') }}
+                                </p>
+                                <small class="text-muted">Click to view match details</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal for Match Details -->
+                    <div class="modal fade" id="matchModal{{ match._id }}" tabindex="-1" aria-labelledby="matchModalLabel{{ match._id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="matchModalLabel{{ match._id }}">
+                                    <i class="fas fa-gamepad me-2"></i> Match Details
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="match-details">
+                                        <h6 class="text-center mb-4">
+                                            <span class="team-name">{{ match.team_name }}</span>
+                                            <span class="vs-badge mx-3">VS</span>
+                                            <span class="team-name">{{ match.opponent_name }}</span>
+                                        </h6>
+                                        <div class="match-info">
+                                            <p><i class="far fa-calendar-alt me-2"></i> <strong>Date:</strong> {{ match.created_at.strftime('%d %b %Y') }}</p>
+                                            <p><i class="far fa-clock me-2"></i> <strong>Match Arranged:</strong> {{ match.created_at.strftime('%H:%M') }}</p>
+                                            <p><i class="fas fa-check-circle me-2 text-success"></i> <strong>Status:</strong> Confirmed</p>
+                                            <!-- Add this prediction result container -->
+                                            <div class="prediction-result mt-3" style="display: none;">
+                                                <div class="alert alert-success">
+                                                    <i class="fas fa-trophy me-2"></i>
+                                                    <strong>Prediction:</strong> <span class="predicted-team"></span> may be the winner!
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary predict-winner-btn" data-team1="{{ match.team_name }}" data-team2="{{ match.opponent_name }}">Predict Winner</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info text-center" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>No upcoming matches scheduled yet.
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+           <!-- MVP Section with enhanced styling -->
+            <div class="container mt-5">
+                <h2 class="text-center mb-5">
+                    <i class="fas fa-award me-2" style="color: var(--accent-color);"></i>
+                    Most Valuable Players (MVPs)
+                </h2>
+                <div class="row justify-content-center">
+                    {% if mvps %}
+                        {% for mvp in mvps %}
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card team-card mvp-card h-100">
+                                    <div class="card-body text-center">
+                                        <div class="mvp-crown">
+                                            <i class="fas fa-crown"></i>
+                                        </div>
+                                        <div class="mvp-avatar-wrapper">
+                                            <div class="mvp-avatar">
+                                                {% if mvp.profile_pic %}
+                                                    <img src="{{ url_for('static', filename='uploads/' + mvp.profile_pic) }}" 
+                                                        alt="{{ mvp.player_name }}" 
+                                                        class="rounded-circle mvp-image">
+                                                {% else %}
+                                                    <div class="mvp-initials">
+                                                        {{ mvp.player_name[0]|upper }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <h5 class="card-title mt-4">{{ mvp.player_name }}</h5>
+                                        <div class="mvp-team">
+                                            <span class="team-badge">
+                                                <i class="fas fa-users me-2"></i>
+                                                {{ mvp.team_name }}
+                                            </span>
+                                        </div>
+                                        <div class="mvp-stats">
+                                            <div class="stat-item">
+                                                <div class="stat-value">{{ mvp.runs }}</div>
+                                                <div class="stat-label">Runs</div>
+                                            </div>
+                                            <div class="stat-item">
+                                                <div class="stat-value">{{ mvp.wickets }}</div>
+                                                <div class="stat-label">Wickets</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="alert alert-info text-center" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No MVP players have been selected yet.
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Add these styles to your existing style section -->
+            <style>
+                /* MVP Section Specific Styles */
+                .mvp-card {
+                    background: linear-gradient(145deg, #2a2a3a, #1f1f2e);
+                    border: none;
+                    position: relative;
+                    overflow: visible;
+                }
+
+                .mvp-crown {
+                    position: absolute;
+                    top: -15px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    color: #ffd700;
+                    font-size: 24px;
+                    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                    animation: float 3s ease-in-out infinite;
+                }
+
+                .mvp-avatar-wrapper {
+                    position: relative;
+                    margin: 20px auto;
+                    width: 120px;
+                    height: 120px;
+                }
+
+                .mvp-avatar {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    padding: 5px;
+                    background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+                    box-shadow: 0 0 20px rgba(0, 166, 90, 0.3);
+                }
+
+                .mvp-image {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border: 3px solid var(--primary-color);
+                }
+
+                .mvp-initials {
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(135deg, var(--primary-color), #2a2a3a);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 2.5rem;
+                    font-weight: 600;
+                    color: var(--secondary-color);
+                    border: 3px solid var(--primary-color);
+                }
+
+                .mvp-team {
+                    margin: 15px 0;
+                }
+
+                .team-badge {
+                    background: linear-gradient(45deg, var(--secondary-color), #00c768);
+                    padding: 8px 15px;
+                    border-radius: 20px;
+                    font-size: 0.9rem;
+                    color: var(--dark-color);
+                    font-weight: 500;
+                }
+
+                .mvp-stats {
+                    display: flex;
+                    justify-content: space-around;
+                    margin-top: 20px;
+                    padding: 15px 0;
+                    background: rgba(0, 0, 0, 0.2);
+                    border-radius: 10px;
+                }
+
+                .stat-item {
+                    text-align: center;
+                }
+
+                .stat-value {
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    color: var(--secondary-color);
+                    margin-bottom: 5px;
+                }
+
+                .stat-label {
+                    font-size: 0.8rem;
+                    color: var(--text-muted-dark);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+
+                @keyframes float {
+                    0%, 100% {
+                        transform: translateX(-50%) translateY(0);
+                    }
+                    50% {
+                        transform: translateX(-50%) translateY(-5px);
+                    }
+                }
+
+                .mvp-card:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 15px 30px rgba(0, 166, 90, 0.2);
+                }
+
+                .mvp-card:hover .mvp-avatar {
+                    box-shadow: 0 0 30px rgba(0, 166, 90, 0.4);
+                }
+
+                .mvp-card:hover .stat-value {
+                    color: var(--accent-color);
+                }
+                /* --- Chatbot Styles --- */
+                #chat-icon {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    width: 60px;
+                    height: 60px;
+                    background-color: var(--secondary-color);
+                    color: var(--dark-color);
+                    border-radius: 50%;
+                    display: flex; /* Use flex to center icon */
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 26px; /* Slightly larger icon */
+                    cursor: pointer;
+                    box-shadow: 0 5px 15px rgba(0, 166, 90, 0.5);
+                    z-index: 1000;
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                }
+        
+                #chat-icon:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 8px 20px rgba(0, 166, 90, 0.6);
+                }
+        
+                #chat-window {
+                    position: fixed;
+                    bottom: 90px; /* Position above the icon */
+                    right: 20px;
+                    width: 350px; /* Adjusted width */
+                    height: 450px; /* Fixed height */
+                    max-height: 80vh; /* Max height relative to viewport */
+                    background-color: var(--primary-color);
+                    border: 1px solid var(--secondary-color);
+                    border-radius: 10px;
+                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+                    display: none; /* Initially hidden */
+                    flex-direction: column;
+                    z-index: 1001;
+                    overflow: hidden; /* Important for minimizing */
+                    transition: height 0.3s ease, bottom 0.3s ease; /* Smooth minimize */
+                }
+        
+                 #chat-window.minimized {
+                    height: 45px; /* Height of the header */
+                    bottom: 20px; /* Align with icon position */
+                    overflow: hidden;
+                }
+        
+        
+                .chat-header {
+                    background-color: rgba(0, 0, 0, 0.3); /* Darker header */
+                    padding: 10px 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                    color: var(--secondary-color);
+                    font-weight: 600;
+                    border-top-left-radius: 10px; /* Match window radius */
+                    border-top-right-radius: 10px;
+                    flex-shrink: 0; /* Prevent header from shrinking */
+                }
+        
+                .chat-header span i {
+                     opacity: 0.8;
+                }
+        
+                .chat-control-btn {
+                    background: none;
+                    border: none;
+                    color: var(--text-muted-dark);
+                    font-size: 1rem;
+                    cursor: pointer;
+                    padding: 2px 5px;
+                    margin-left: 8px;
+                    transition: color 0.2s ease;
+                }
+                .chat-control-btn:hover {
+                    color: var(--light-color);
+                }
+        
+        
+                #chat-messages {
+                    flex-grow: 1; /* Take available space */
+                    overflow-y: auto;
+                    padding: 15px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px; /* Space between messages */
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separator */
+                }
+        
+                /* Scrollbar styling (optional, for Webkit browsers) */
+                #chat-messages::-webkit-scrollbar {
+                    width: 6px;
+                }
+                #chat-messages::-webkit-scrollbar-track {
+                    background: rgba(0, 0, 0, 0.1);
+                    border-radius: 3px;
+                }
+                #chat-messages::-webkit-scrollbar-thumb {
+                    background-color: var(--secondary-color);
+                    border-radius: 3px;
+                }
+        
+        
+                .chat-message {
+                    padding: 10px 15px; /* Slightly more padding */
+                    border-radius: 18px; /* More rounded */
+                    max-width: 85%; /* Allow slightly wider messages */
+                    word-wrap: break-word;
+                    font-size: 0.9rem;
+                     line-height: 1.4;
+                     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                     opacity: 0; /* Start hidden for animation */
+                     animation: fadeInMessage 0.4s ease forwards;
+                }
+        
+                .user-message {
+                    background-color: var(--secondary-color);
+                    color: var(--dark-color);
+                    margin-left: auto; /* Align right */
+                    border-bottom-right-radius: 5px; /* Bubble tail */
+                     align-self: flex-end;
+                }
+        
+                .bot-message {
+                     background-color: #3a4b60; /* Consistent bot color */
+                     color: var(--light-color);
+                     margin-right: auto; /* Align left */
+                     border-bottom-left-radius: 5px; /* Bubble tail */
+                     align-self: flex-start;
+                 }
+        
+                 @keyframes fadeInMessage {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+        
+        
+                .chat-input-area {
+                    display: flex;
+                    padding: 12px 15px; /* More padding */
+                    background-color: rgba(0, 0, 0, 0.2); /* Slight background */
+                    flex-shrink: 0; /* Prevent input area from shrinking */
+                     border-bottom-left-radius: 10px; /* Match window radius */
+                    border-bottom-right-radius: 10px;
+                }
+        
+                #chat-input {
+                    flex-grow: 1;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    background-color: var(--dark-color); /* Match body background */
+                    color: var(--light-color);
+                    border-radius: 20px; /* Pill shape */
+                    padding: 8px 15px;
+                    margin-right: 10px;
+                    font-size: 0.9rem;
+                     outline: none; /* Remove default outline */
+                     transition: border-color 0.3s ease;
+                }
+                #chat-input:focus {
+                     border-color: var(--secondary-color);
+                }
+                #chat-input::placeholder {
+                    color: var(--text-muted-dark);
+                    opacity: 0.7;
+                }
+        
+                #send-chat {
+                    background-color: var(--secondary-color);
+                    border: none;
+                    color: var(--dark-color);
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                    flex-shrink: 0; /* Prevent button shrinking */
+                }
+                #send-chat:hover {
+                    background-color: #008c4a; /* Darker green */
+                }
+                #send-chat i {
+                    font-size: 1rem;
+                    margin-left: 2px; /* Adjust icon position slightly */
+                }
+                /* --- End Chatbot Styles --- */
+            </style>
+
+        </div>
+        <div class="text-center mt-5"> <!-- Increased margin -->
+            <p class="lead" style="font-size: 1.1rem;">Want to showcase your own team?</p>
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Register Now & Create Your Team!</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-4 mt-5"> <!-- Removed bg-light -->
+        <div class="container text-center">
+            <p class="mb-0">© {{ now.year }} Sports Team Manager. All Rights Reserved.</p> <!-- Dynamic Year -->
+            <p><small>Designed with <i class="fas fa-heart text-danger"></i> for Sports Enthusiasts</small></p>
+        </div>
+    </footer>
+    <!-- Chatbot Elements -->
+    <div id="chat-icon">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <div id="chat-window">
+        <div class="chat-header">
+            <span><i class="fas fa-robot me-1"></i> Chat Helper</span>
+            <div>
+                <button id="minimize-chat" class="chat-control-btn"><i class="fas fa-window-minimize"></i></button>
+                <button id="close-chat" class="chat-control-btn"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div id="chat-messages">
+            <!-- Chat messages will appear here -->
+             <div class="chat-message bot-message">
+                Hi there! How can I help you today? Ask about registration, login, teams, matches, MVPs, or predictions.
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button id="send-chat"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+    <!-- End Chatbot Elements -->
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ... (Keep your existing JS for card fade-in and prediction) ...
+
+        // Chatbot Functionality (Add this)
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatIcon = document.getElementById('chat-icon');
+            const chatWindow = document.getElementById('chat-window');
+            const closeChatBtn = document.getElementById('close-chat');
+            const minimizeChatBtn = document.getElementById('minimize-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendChatBtn = document.getElementById('send-chat');
+            let isChatMinimized = false;
+            let isChatOpen = false; // Track if chat has been opened at least once
+
+            // --- Event Listeners ---
+            chatIcon.addEventListener('click', () => {
+                toggleChatWindow();
+            });
+
+            closeChatBtn.addEventListener('click', () => {
+                chatWindow.style.display = 'none';
+                chatIcon.style.display = 'flex'; // Show icon again
+                isChatOpen = false; // Reset open state
+            });
+
+            minimizeChatBtn.addEventListener('click', () => {
+                toggleMinimizeChat();
+            });
+
+            sendChatBtn.addEventListener('click', () => {
+                handleUserInput();
+            });
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleUserInput();
+                }
+            });
+
+            // --- Functions ---
+            function toggleChatWindow() {
+                if (chatWindow.style.display === 'flex') {
+                    if (isChatMinimized) {
+                        // Maximize if minimized
+                        toggleMinimizeChat();
+                    } else {
+                        // Close if open and maximized (or handle as minimize)
+                         chatWindow.style.display = 'none';
+                         chatIcon.style.display = 'flex';
+                         isChatOpen = false;
+                    }
+                } else {
+                    // Open chat
+                    chatWindow.style.display = 'flex';
+                    chatIcon.style.display = 'none'; // Hide icon when window is open
+                    if (isChatMinimized) { // If reopening when it was minimized, ensure it's maximized
+                       toggleMinimizeChat(); // This will maximize it
+                    }
+                    if (!isChatOpen) { // If it's the first time opening or reopened after close
+                       // Optional: Add a welcome message again or check if messages exist
+                       isChatOpen = true;
+                    }
+                     scrollToBottom(); // Scroll down when opened
+                }
+            }
+
+             function toggleMinimizeChat() {
+                const chatBody = chatMessages.parentNode.querySelectorAll('.chat-input-area, #chat-messages');
+                const minimizeIcon = minimizeChatBtn.querySelector('i');
+
+                isChatMinimized = !isChatMinimized;
+                chatWindow.classList.toggle('minimized');
+
+                if (isChatMinimized) {
+                    chatBody.forEach(el => el.style.display = 'none');
+                    minimizeIcon.classList.remove('fa-window-minimize');
+                    minimizeIcon.classList.add('fa-window-maximize');
+                    chatWindow.style.bottom = '20px'; // Align with icon position
+                } else {
+                     chatBody.forEach(el => el.style.display = 'flex'); // Or block depending on element
+                     chatMessages.style.display = 'block'; // Ensure message area is block
+                     minimizeIcon.classList.remove('fa-window-maximize');
+                    minimizeIcon.classList.add('fa-window-minimize');
+                    chatWindow.style.bottom = '90px'; // Reset position
+                    scrollToBottom(); // Scroll down when maximized
+                }
+            }
+
+
+            function handleUserInput() {
+                const messageText = chatInput.value.trim();
+                if (messageText) {
+                    displayMessage(messageText, 'user');
+                    chatInput.value = '';
+                    getBotResponse(messageText);
+                }
+            }
+
+            function displayMessage(message, sender) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', sender + '-message');
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+                scrollToBottom();
+            }
+
+             function scrollToBottom() {
+                 // Use setTimeout to allow the DOM to update before scrolling
+                setTimeout(() => {
+                     chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 0);
+            }
+
+            function getBotResponse(userInput) {
+                const lowerInput = userInput.toLowerCase();
+                let botReply = "Sorry, I couldn't quite understand that. Can you please rephrase? You can ask about registration, login, teams, matches, MVPs, or predictions."; // Default reply
+
+                // Simple keyword matching for common queries
+                if (lowerInput.includes("register") || lowerInput.includes("sign up")) {
+                    botReply = "You can register by clicking the 'Register' button in the top navigation bar or the 'Register Now' button in the hero section.";
+                } else if (lowerInput.includes("login") || lowerInput.includes("sign in")) {
+                    botReply = "Click the 'Login' button in the top navigation bar to access your account.";
+                } else if (lowerInput.includes("create team") || lowerInput.includes("make a team")) {
+                    botReply = "After logging in, you should find an option in your dashboard or profile area to create and manage your team.";
+                } else if (lowerInput.includes("view teams") || lowerInput.includes("see teams") || lowerInput.includes("featured teams")) {
+                    botReply = "The featured teams are displayed on the homepage. You can click on any team card to see its members.";
+                } else if (lowerInput.includes("upcoming match") || lowerInput.includes("see matches")) {
+                    botReply = "Upcoming matches are listed on the homepage below the featured teams. Click on a match card for details.";
+                } else if (lowerInput.includes("mvp") || lowerInput.includes("valuable player")) {
+                    botReply = "The Most Valuable Players (MVPs), based on their recent performance stats like runs and wickets, are showcased on the homepage.";
+                } else if (lowerInput.includes("predict") || lowerInput.includes("winner prediction")) {
+                    botReply = "Yes! When you view the details of an upcoming match (by clicking its card), you'll find a 'Predict Winner' button. Give it a try!";
+                } else if (lowerInput.includes("add members") || lowerInput.includes("team members")) {
+                    botReply = "Team members are usually managed from your team's dashboard after you log in. Look for an 'Add Member' or 'Manage Roster' option.";
+                } else if (lowerInput.includes("forgot password") || lowerInput.includes("reset password")) {
+                    botReply = "There should be a 'Forgot Password?' link on the login page to help you reset it.";
+                } else if (lowerInput.includes("hello") || lowerInput.includes("hi") || lowerInput.includes("hey")) {
+                     botReply = "Hello! How can I assist you with the Sports Team Manager today?";
+                } else if (lowerInput.includes("thank you") || lowerInput.includes("thanks")) {
+                    botReply = "You're welcome! Let me know if you have any other questions.";
+                } else if (lowerInput.includes("bye") || lowerInput.includes("goodbye")) {
+                    botReply = "Goodbye! Have a great day!";
+                }
+
+                 // Simulate bot thinking time
+                setTimeout(() => {
+                    displayMessage(botReply, 'bot');
+                }, 600); // 600ms delay
+            }
+
+            // --- Initialize ---
+            chatWindow.style.display = 'none'; // Ensure it's hidden initially
+            chatIcon.style.display = 'flex'; // Ensure icon is visible initially
+
+             // --- Keep your existing JS for card fade-in and prediction here ---
+             // Example:
+             const teamCards = document.querySelectorAll('.card-body');
+             if ('IntersectionObserver' in window) {
+                // ... your intersection observer code ...
+             } else {
+                teamCards.forEach(card => card.classList.add('visible'));
+             }
+
+             const predictButtons = document.querySelectorAll('.predict-winner-btn');
+             predictButtons.forEach(button => {
+                 button.addEventListener('click', function() {
+                    // ... your prediction logic ...
+                 });
+             });
+        });
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Card Fade-in Animation Trigger
+        window.addEventListener('load', function () {
+            const teamCards = document.querySelectorAll('.card-body');
+
+            // Simple check if IntersectionObserver is supported
+             if ('IntersectionObserver' in window) {
+                const cardObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target); // Optional: stop observing once visible
+                        }
+                    });
+                }, { threshold: 0.1 }); // Trigger when 10% of the card is visible
+
+                teamCards.forEach(card => {
+                    cardObserver.observe(card);
+                 });
+
+            } else {
+                 // Fallback for older browsers: just make them visible
+                 teamCards.forEach(card => {
+                    card.classList.add('visible');
+                });
+            }
+        });
+        // Prediction functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all predict buttons
+            const predictButtons = document.querySelectorAll('.predict-winner-btn');
+            
+            // Add click event to each predict button
+            predictButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get team names from data attributes
+                    const team1 = this.getAttribute('data-team1');
+                    const team2 = this.getAttribute('data-team2');
+                    
+                    // Randomly select a winner (50% chance for each team)
+                    const winner = Math.random() < 0.5 ? team1 : team2;
+                    
+                    // Find the closest prediction result container
+                    const modalBody = this.closest('.modal-content').querySelector('.modal-body');
+                    const predictionResult = modalBody.querySelector('.prediction-result');
+                    const predictedTeam = modalBody.querySelector('.predicted-team');
+                    
+                    // Update the prediction text and show the result
+                    predictedTeam.textContent = winner;
+                    predictionResult.style.display = 'block';
+                    
+                    // Optional: Add some animation or styling
+                    predictionResult.classList.add('animate__animated', 'animate__fadeIn');
+                });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Chat Elements ---
+            const chatIcon = document.getElementById('chat-icon');
+            const chatWindow = document.getElementById('chat-window');
+            const closeChatBtn = document.getElementById('close-chat');
+            const minimizeChatBtn = document.getElementById('minimize-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendChatBtn = document.getElementById('send-chat');
+            let isChatMinimized = false;
+            let isChatOpen = false; // Track if chat has been opened at least once
+        
+            // --- Event Listeners ---
+            chatIcon.addEventListener('click', () => {
+                toggleChatWindow();
+            });
+        
+            closeChatBtn.addEventListener('click', () => {
+                chatWindow.style.display = 'none';
+                chatIcon.style.display = 'flex'; // Show icon again
+                isChatOpen = false; // Reset open state
+            });
+        
+            minimizeChatBtn.addEventListener('click', () => {
+                toggleMinimizeChat();
+            });
+        
+            sendChatBtn.addEventListener('click', () => {
+                handleUserInput();
+            });
+        
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleUserInput();
+                }
+            });
+        
+            // --- Functions ---
+            function toggleChatWindow() {
+                if (chatWindow.style.display === 'flex') {
+                    if (isChatMinimized) {
+                        // Maximize if minimized
+                        toggleMinimizeChat();
+                    } else {
+                        // Close if open and maximized
+                        chatWindow.style.display = 'none';
+                        chatIcon.style.display = 'flex';
+                        isChatOpen = false;
+                    }
+                } else {
+                    // Open chat
+                    chatWindow.style.display = 'flex';
+                    chatIcon.style.display = 'none'; // Hide icon when window is open
+                    if (isChatMinimized) { 
+                        toggleMinimizeChat(); // This will maximize it
+                    }
+                    if (!isChatOpen) {
+                        isChatOpen = true;
+                    }
+                    scrollToBottom(); // Scroll down when opened
+                }
+            }
+        
+            function toggleMinimizeChat() {
+                // Get elements that should be hidden when minimized
+                const chatInputArea = document.querySelector('.chat-input-area');
+                const minimizeIcon = minimizeChatBtn.querySelector('i');
+        
+                isChatMinimized = !isChatMinimized;
+                chatWindow.classList.toggle('minimized');
+        
+                if (isChatMinimized) {
+                    // Hide chat body and input area
+                    chatMessages.style.display = 'none';
+                    chatInputArea.style.display = 'none';
+                    // Change icon to maximize
+                    minimizeIcon.classList.remove('fa-window-minimize');
+                    minimizeIcon.classList.add('fa-window-maximize');
+                    chatWindow.style.bottom = '20px'; // Align with icon position
+                } else {
+                    // Show chat body and input area
+                    chatMessages.style.display = 'flex'; 
+                    chatInputArea.style.display = 'flex';
+                    // Change icon to minimize
+                    minimizeIcon.classList.remove('fa-window-maximize');
+                    minimizeIcon.classList.add('fa-window-minimize');
+                    chatWindow.style.bottom = '90px'; // Reset position
+                    scrollToBottom(); // Scroll down when maximized
+                }
+            }
+        
+            function handleUserInput() {
+                const messageText = chatInput.value.trim();
+                if (messageText) {
+                    displayMessage(messageText, 'user');
+                    chatInput.value = '';
+                    getBotResponse(messageText);
+                }
+            }
+        
+            function displayMessage(message, sender) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', sender + '-message');
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+                scrollToBottom();
+            }
+        
+            function scrollToBottom() {
+                // Use setTimeout to allow the DOM to update before scrolling
+                setTimeout(() => {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 0);
+            }
+        
+            function getBotResponse(userInput) {
+                const lowerInput = userInput.toLowerCase();
+                let botReply = "Sorry, I couldn't quite understand that. Can you please rephrase? You can ask about registration, login, teams, matches, MVPs, or predictions."; // Default reply
+        
+                // Simple keyword matching for common queries
+                if (lowerInput.includes("register") || lowerInput.includes("sign up")) {
+                    botReply = "You can register by clicking the 'Register' button in the top navigation bar or the 'Register Now' button in the hero section.";
+                
+                } else if (lowerInput.includes("login") || lowerInput.includes("sign in")) {
+                    botReply = "Click the 'Login' button in the top navigation bar to access your account.";
+                } else if (lowerInput.includes("create team") || lowerInput.includes("make a team")) {
+                    botReply = "After logging in, you should find an option in your dashboard or profile area to create and manage your team.";
+                } else if (lowerInput.includes("view teams") || lowerInput.includes("see teams") || lowerInput.includes("featured teams")) {
+                    botReply = "The featured teams are displayed on the homepage. You can click on any team card to see its members.";
+                } else if (lowerInput.includes("upcoming match") || lowerInput.includes("see matches")) {
+                    botReply = "Upcoming matches are listed on the homepage below the featured teams. Click on a match card for details.";
+                } else if (lowerInput.includes("mvp") || lowerInput.includes("valuable player")) {
+                    botReply = "The Most Valuable Players (MVPs), based on their recent performance stats like runs and wickets, are showcased on the homepage.";
+                } else if (lowerInput.includes("predict") || lowerInput.includes("winner prediction")) {
+                    botReply = "Yes! When you view the details of an upcoming match (by clicking its card), you'll find a 'Predict Winner' button. Give it a try!";
+                } else if (lowerInput.includes("add members") || lowerInput.includes("team members")) {
+                    botReply = "Team members are usually managed from your team's dashboard after you log in. Look for an 'Add Member' or 'Manage Roster' option.";
+                } else if (lowerInput.includes("forgot password") || lowerInput.includes("reset password")) {
+                    botReply = "There should be a 'Forgot Password?' link on the login page to help you reset it.";
+                } else if (lowerInput.includes("hello") || lowerInput.includes("hi") || lowerInput.includes("hey")) {
+                    botReply = "Hello! How can I assist you with the Sports Team Manager today?";
+                } else if (lowerInput.includes("thank you") || lowerInput.includes("thanks")) {
+                    botReply = "You're welcome! Let me know if you have any other questions.";
+                } else if (lowerInput.includes("bye") || lowerInput.includes("goodbye")) {
+                    botReply = "Goodbye! Have a great day!";
+                }
+                else if (lowerInput.includes("thank you") || lowerInput.includes("thanks") || lowerInput.includes("thank u")) {
+                    botReply = "You're welcome! Let me know if you have any other questions.";
+                } else if (lowerInput.includes("bye") || lowerInput.includes("goodbye")) {
+                    botReply = "Goodbye! Have a great day!";
+                }
+                
+        
+                // Simulate bot thinking time
+                setTimeout(() => {
+                    displayMessage(botReply, 'bot');
+                }, 600); // 600ms delay
+            }
+        
+            // --- Initialize ---
+            chatWindow.style.display = 'none'; // Ensure it's hidden initially
+            chatIcon.style.display = 'flex'; // Ensure icon is visible initially
+        });
+    </script>
+</body>
+</html>

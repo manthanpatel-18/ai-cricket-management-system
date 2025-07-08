@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Team - {{ team.team_name }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Dark Theme Variables --- */
+        :root {
+            --dark-bg: #1a1d24;
+            --dark-surface: #272b33;
+            --dark-border: #40454f;
+            --dark-text-primary: #e0e0e0;
+            --dark-text-secondary: #a0a0a0;
+            --dark-text-headings: #ffffff;
+            --dark-primary-accent: #0d6efd;
+            --dark-secondary-accent: #6c757d;
+            --dark-danger-accent: #dc3545;
+            --dark-shadow-color: rgba(0, 0, 0, 0.4);
+            --dark-focus-ring: rgba(13, 110, 253, 0.35);
+        }
+
+        /* --- General Styling --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--dark-text-primary);
+            padding-bottom: 50px;
+        }
+
+        /* --- Form Container Card --- */
+        .form-container-card {
+            background-color: var(--dark-surface);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--dark-shadow-color);
+            margin-top: 40px;
+            overflow: hidden;
+            border: 1px solid var(--dark-border);
+        }
+
+        .form-container-card .card-header {
+            background-color: #212529;
+            color: var(--dark-text-headings);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--dark-border);
+        }
+        .form-container-card .card-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        .form-container-card .card-body {
+            padding: 2rem 2.5rem;
+        }
+
+        /* --- Section Headings --- */
+        h3.section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-text-headings);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        /* --- Form Elements --- */
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: var(--dark-text-secondary);
+        }
+
+        .form-control {
+            border-radius: 6px;
+            background-color: var(--dark-bg);
+            border: 1px solid var(--dark-border);
+            color: var(--dark-text-primary);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-control:focus {
+            background-color: var(--dark-bg);
+            border-color: var(--dark-primary-accent);
+            box-shadow: 0 0 0 0.25rem var(--dark-focus-ring);
+            color: var(--dark-text-primary);
+        }
+        .form-control[type="file"] {
+            padding: 0.375rem 0.75rem;
+        }
+        .form-control[type="file"]::file-selector-button {
+             background-color: var(--dark-secondary-accent);
+             color: var(--dark-text-headings);
+             border: 1px solid var(--dark-secondary-accent);
+             border-radius: 4px;
+             padding: 0.375rem 0.75rem;
+             transition: background-color .15s ease-in-out;
+        }
+         .form-control[type="file"]::file-selector-button:hover {
+             background-color: #5c636a;
+         }
+        .form-control[type="file"]:focus {
+           box-shadow: 0 0 0 0.25rem var(--dark-focus-ring);
+        }
+
+        .form-text, small.text-muted { /* Apply to helper text */
+            color: var(--dark-text-secondary) !important; /* Important to override default */
+        }
+
+        .text-danger {
+            color: var(--dark-danger-accent) !important;
+        }
+
+        /* --- Image Previews --- */
+        .image-preview-container {
+             margin-bottom: 10px;
+        }
+        .image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: contain;
+            border-radius: 6px;
+            border: 1px solid var(--dark-border);
+            background-color: #ffffff; /* White bg for visibility */
+            padding: 4px;
+            vertical-align: middle; /* Align with text */
+        }
+        .team-logo-preview { /* Slightly larger preview for team logo */
+            max-width: 150px;
+            max-height: 150px;
+        }
+
+
+        /* --- Member Input Group --- */
+        #members-container {
+            margin-bottom: 1rem;
+        }
+        .member-input-group {
+            background-color: var(--dark-bg);
+            border: 1px solid var(--dark-border);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .member-input-group:hover {
+            background-color: #212529;
+            border-color: #555c68;
+        }
+
+        .member-input-group .row {
+            align-items: flex-start;
+        }
+
+        /* --- Remove Member Button --- */
+        .remove-member {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            line-height: 1;
+            border-radius: 4px;
+            color: var(--dark-danger-accent);
+            background-color: transparent;
+            border: 1px solid var(--dark-danger-accent);
+        }
+        .remove-member:hover {
+             background-color: rgba(220, 53, 69, 0.15);
+             color: #ff6b7a;
+        }
+
+        /* --- Action Buttons --- */
+        .action-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .action-buttons .btn {
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+        .action-buttons .btn-primary {
+             background-color: var(--dark-primary-accent);
+             border-color: var(--dark-primary-accent);
+             color: white;
+        }
+         .action-buttons .btn-primary:hover {
+             opacity: 0.9;
+         }
+        .action-buttons .btn-outline-secondary {
+             color: var(--dark-text-secondary);
+             border-color: var(--dark-text-secondary);
+        }
+         .action-buttons .btn-outline-secondary:hover {
+             color: var(--dark-text-primary);
+             background-color: var(--dark-secondary-accent);
+             border-color: var(--dark-secondary-accent);
+         }
+
+
+        /* Add member button */
+        #add-member {
+            font-weight: 500;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            color: var(--dark-primary-accent);
+            border-color: var(--dark-primary-accent);
+        }
+         #add-member:hover {
+             color: white;
+             background-color: var(--dark-primary-accent);
+             border-color: var(--dark-primary-accent);
+             opacity: 0.9;
+         }
+
+
+         /* --- Alerts --- */
+         .alert {
+            border-radius: 6px;
+            color: var(--dark-text-primary);
+            background-color: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+         }
+         .alert .btn-close {
+              filter: invert(1) grayscale(100%) brightness(200%);
+         }
+         .alert-info { background-color: #052c65; border-color: #073b8a; color: #cfe2ff; }
+         .alert-success { background-color: #0a3622; border-color: #0f5132; color: #d1e7dd; }
+         .alert-warning { background-color: #332701; border-color: #664d03; color: #fff3cd; }
+         .alert-danger { background-color: #58151c; border-color: #842029; color: #f8d7da; }
+
+         /* --- Separator --- */
+         hr {
+             border-color: var(--dark-border);
+         }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+
+                <div class="form-container-card">
+                    <div class="card-header">
+                         <!-- Added Back Button Link Here -->
+                        <div class="d-flex justify-content-between align-items-center">
+                             <h1><i class="fas fa-edit me-2"></i>Edit Team</h1>
+                             <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-light">
+                                 <i class="fas fa-times me-1"></i> Cancel
+                             </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="POST" enctype="multipart/form-data">
+                            <h3 class="section-title">Team Details</h3>
+                             <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="team_name" class="form-label">Team Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="team_name" name="team_name" value="{{ team.team_name }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="captain_name" class="form-label">Captain Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="captain_name" name="captain_name" value="{{ team.captain_name }}" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="team_logo" class="form-label">Team Logo</label>
+                                {% if team.team_logo %}
+                                    <div class="image-preview-container">
+                                         <span class="me-2">Current:</span>
+                                         <img src="{{ url_for('static', filename='uploads/' + team.team_logo) }}" alt="Team Logo" class="image-preview team-logo-preview">
+                                    </div>
+                                {% endif %}
+                                <input type="file" class="form-control mt-2" id="team_logo" name="team_logo" accept="image/*">
+                                <small class="form-text">Upload a new logo to replace the current one.</small>
+                            </div>
+
+                            <h3 class="section-title">Team Members</h3>
+                            <div id="members-container">
+                                {% for member in team.members %}
+                                <div class="member-input-group" data-member-id="{{ member._id | string }}"> 
+                                    <input type="hidden" name="member_ids[]" value="{{ member._id | string }}"> 
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Member Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="member_names[]" value="{{ member.name }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Profile Picture</label>
+                                                {% if member.profile_pic %}
+                                                    <div class="image-preview-container">
+                                                         <span class="me-2">Current:</span>
+                                                        <img src="{{ url_for('static', filename='uploads/' + member.profile_pic) }}" alt="{{ member.name }}" class="image-preview">
+                                                    </div>
+                                                {% endif %}
+                                                 <!-- Name attribute links file upload to existing member index -->
+                                                <input type="file" class="form-control mt-2" name="member_profile_pic_{{ loop.index0 }}" accept="image/*">
+                                                <small class="form-text">Upload new to replace.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <!-- Remove button styled via CSS -->
+                                     <!-- Consider adding a confirmation step here via JS -->
+                                    <button type="button" class="btn btn-sm remove-member" title="Remove Member">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                                {% endfor %}
+                                <!-- Dynamic members added here -->
+                            </div>
+
+                            <!-- Add Member button styled via CSS -->
+                            <button type="button" class="btn btn-outline-primary mb-3" id="add-member">
+                                <i class="fas fa-plus me-1"></i> Add New Member
+                            </button>
+
+                            <hr class="my-4">
+
+                            <!-- Action buttons styled via CSS -->
+                            <div class="action-buttons">
+                                <button type="submit" class="btn btn-primary">
+                                   <i class="fas fa-sync-alt me-1"></i> Update Team
+                                </button>
+                                <!-- Cancel button moved to header for this layout -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize count based on existing members + potential new ones
+            let memberCount = document.querySelectorAll('#members-container .member-input-group').length;
+            const container = document.getElementById('members-container');
+
+            // Function to attach remove listener
+            const addRemoveListener = (button) => {
+                button.addEventListener('click', function() {
+                     // Optional: Confirmation before removing
+                     if (confirm('Are you sure you want to remove this member slot? If this is an existing member, they might be removed upon saving.')) {
+                        const groupToRemove = this.closest('.member-input-group');
+                        if (groupToRemove) {
+                            // Instead of removing immediately, you might want to mark it for deletion
+                            // for the backend, e.g., add a hidden input.
+                            // For simplicity here, we just remove the fields from the form.
+                            groupToRemove.remove();
+                            // Note: This doesn't delete the member from the DB yet,
+                            // your backend needs to handle removed member_ids.
+                        }
+                     }
+                });
+            };
+
+            // Attach listener to existing remove buttons
+            container.querySelectorAll('.remove-member').forEach(addRemoveListener);
+
+            // Add New Member Button
+            document.getElementById('add-member').addEventListener('click', function() {
+                const newMemberGroup = document.createElement('div');
+                newMemberGroup.className = 'member-input-group new-member'; // Add 'new-member' class
+
+                 // Use a placeholder index for new members (backend needs to handle this)
+                 // Or generate a unique temporary ID if needed
+                const fileInputName = `member_profile_pic_new_${memberCount}`;
+
+                // Add hidden input to distinguish new members on the backend
+                 newMemberGroup.innerHTML = `
+                    <input type="hidden" name="member_ids[]" value="new_${memberCount}"> {/* Mark as new */}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">New Member Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="member_names[]" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Profile Picture</label>
+                                <input type="file" class="form-control" name="${fileInputName}" accept="image/*">
+                                <small class="form-text">Optional.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm remove-member" title="Remove New Member">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+
+                container.appendChild(newMemberGroup);
+
+                // Attach listener to the new remove button
+                const newRemoveButton = newMemberGroup.querySelector('.remove-member');
+                if (newRemoveButton) {
+                    addRemoveListener(newRemoveButton);
+                }
+
+                memberCount++; // Increment overall count
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

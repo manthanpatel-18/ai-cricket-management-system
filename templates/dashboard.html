@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+    <title>Dashboard - Sports Team Manager (Dark)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Dark Theme Variables --- */
+        :root {
+            --dark-bg: #1a1d24;
+            --dark-surface: #272b33;
+            --dark-border: #40454f;
+            --dark-text-primary: #e0e0e0;
+            --dark-text-secondary: #a0a0a0;
+            --dark-text-headings: #ffffff;
+            --dark-primary-accent: #0d6efd;
+            --dark-shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- Sticky Footer Setup --- */
+        html {
+            height: 100%;
+        }
+        body {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--dark-text-primary);
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+        /* --- END Sticky Footer Setup --- */
+
+        h2 {
+            font-weight: 600;
+            color: var(--dark-text-headings);
+        }
+        h3 {
+            color: var(--dark-text-headings);
+        }
+        h5 {
+             color: var(--dark-text-headings);
+        }
+
+        .lead {
+            font-weight: 400;
+            color: var(--dark-text-secondary);
+        }
+
+        /* --- Navbar Enhancements --- */
+        .navbar {
+            box-shadow: 0 2px 4px var(--dark-shadow-color);
+            flex-shrink: 0;
+        }
+        .navbar.navbar-dark .navbar-brand {
+            font-weight: 600;
+            color: var(--dark-text-headings);
+        }
+         .navbar.navbar-dark .navbar-text {
+             color: rgba(255, 255, 255, 0.75);
+         }
+        .navbar.navbar-dark .nav-link:hover {
+             color: rgba(255, 255, 255, 0.9) !important;
+        }
+        .navbar.navbar-dark .btn-outline-light {
+            color: #f8f9fa;
+            border-color: #f8f9fa;
+        }
+        .navbar.navbar-dark .btn-outline-light:hover {
+            color: #000;
+            background-color: #f8f9fa;
+            border-color: #f8f9fa;
+        }
+
+
+        /* --- Welcome Container --- */
+        .welcome-container {
+             background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+             color: white;
+            border-radius: 12px;
+            padding: 40px 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 91, 255, 0.2);
+        }
+        .welcome-container h2 {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .welcome-container .btn-primary {
+             background-color: var(--dark-surface);
+             color: var(--dark-text-primary);
+             border: 1px solid var(--dark-border);
+             font-weight: 600;
+             padding: 12px 25px;
+             transition: all 0.3s ease;
+             box-shadow: 0 2px 5px var(--dark-shadow-color);
+        }
+         .welcome-container .btn-primary:hover {
+             background-color: #495057;
+             color: var(--dark-text-headings);
+             border-color: #495057;
+             box-shadow: 0 4px 8px var(--dark-shadow-color);
+             transform: translateY(-2px);
+         }
+
+
+        /* --- Section Header --- */
+        .section-header {
+            margin-bottom: 30px;
+        }
+        .section-header h2 {
+             margin-bottom: 0;
+        }
+        .section-header .btn-primary {
+             background-color: var(--dark-primary-accent);
+             border-color: var(--dark-primary-accent);
+             color: white;
+        }
+         .section-header .btn-primary:hover {
+             opacity: 0.9;
+         }
+
+
+        /* --- Team Card Styling --- */
+        .team-card {
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .team-card .card {
+            background-color: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px var(--dark-shadow-color);
+            overflow: hidden;
+            height: 100%;
+        }
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px var(--dark-shadow-color);
+        }
+        .team-card .card-body {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: var(--dark-text-primary);
+        }
+        .team-card .card-title {
+            font-weight: 600;
+            color: var(--dark-text-headings);
+            margin-bottom: 8px;
+        }
+        .team-card .card-text {
+            font-size: 0.9rem;
+            color: var(--dark-text-secondary);
+            margin-bottom: 15px;
+        }
+
+        /* --- Team Logo --- */
+        .team-logo-container {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .team-logo {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid var(--dark-border);
+            background-color: #fff;
+        }
+        .team-logo-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: #3e444c;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px dashed var(--dark-border);
+        }
+
+        /* --- Member Avatars --- */
+        .member-avatars-container {
+            text-align: center;
+            margin-bottom: 20px;
+            height: 35px;
+        }
+        .member-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: -8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 2px solid var(--dark-surface);
+            box-shadow: 0 0 3px var(--dark-shadow-color);
+            object-fit: cover;
+            color: #495057;
+        }
+         .member-avatar-initials {
+             width: 32px;
+             height: 32px;
+             border-radius: 50%;
+             background-color: #495057;
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             margin-right: -8px;
+             font-size: 0.8rem;
+             font-weight: 600;
+             border: 2px solid var(--dark-surface);
+             box-shadow: 0 0 3px var(--dark-shadow-color);
+             color: var(--dark-text-primary);
+         }
+        .member-avatar-more {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            padding: 0 8px;
+            height: 32px;
+            border-radius: 16px;
+            margin-left: 12px;
+            font-weight: 500;
+            background-color: #495057;
+            color: var(--dark-text-primary);
+        }
+
+        /* --- Card Buttons --- */
+        .card-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: auto;
+        }
+        .card-actions .btn {
+             padding: 6px 12px;
+             font-size: 0.85rem;
+             font-weight: 500;
+             transition: all 0.2s ease;
+        }
+         .card-actions .btn-outline-info {
+             color: #0dcaf0; border-color: #0dcaf0;
+         }
+         .card-actions .btn-outline-info:hover {
+             color: #fff; background-color: #0dcaf0; border-color: #0dcaf0; opacity: 0.8;
+         }
+         .card-actions .btn-outline-primary {
+             color: #0d6efd; border-color: #0d6efd;
+         }
+         .card-actions .btn-outline-primary:hover {
+             color: #fff; background-color: #0d6efd; border-color: #0d6efd; opacity: 0.8;
+         }
+         .card-actions .btn-outline-danger {
+             color: #dc3545; border-color: #dc3545;
+         }
+         .card-actions .btn-outline-danger:hover {
+             color: #fff; background-color: #dc3545; border-color: #dc3545; opacity: 0.8;
+         }
+         .card-actions .btn:hover {
+              transform: translateY(-1px);
+              box-shadow: 0 2px 4px var(--dark-shadow-color);
+         }
+
+
+        /* --- Empty State --- */
+        .empty-state {
+            background-color: var(--dark-surface);
+            border-radius: 12px;
+            padding: 60px 30px;
+            text-align: center;
+            border: 1px dashed var(--dark-border);
+            margin-top: 20px;
+        }
+        .empty-state .empty-state-icon {
+            font-size: 4rem;
+            color: #6c757d;
+            margin-bottom: 25px;
+        }
+        .empty-state h3 {
+            font-weight: 600;
+            color: var(--dark-text-headings);
+            margin-bottom: 10px;
+        }
+        .empty-state p {
+            color: var(--dark-text-secondary);
+            margin-bottom: 30px;
+        }
+        .empty-state .btn {
+            font-weight: 600;
+            padding: 12px 25px;
+            background-color: var(--dark-primary-accent);
+            border-color: var(--dark-primary-accent);
+            color: white;
+        }
+         .empty-state .btn:hover {
+             opacity: 0.9;
+         }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #212529;
+            padding: 25px 0;
+            border-top: 1px solid var(--dark-border);
+            flex-shrink: 0;
+        }
+        footer p {
+            margin-bottom: 0;
+            color: var(--dark-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* --- Alerts (Basic Dark Adaptation) --- */
+        .alert {
+            color: var(--dark-text-primary);
+            background-color: var(--dark-surface);
+            border-color: var(--dark-border);
+        }
+        .alert .btn-close {
+             filter: invert(1) grayscale(100%) brightness(200%);
+        }
+         .alert-info { background-color: #052c65; border-color: #073b8a; color: #cfe2ff; }
+         .alert-success { background-color: #0a3622; border-color: #0f5132; color: #d1e7dd; }
+         .alert-warning { background-color: #664d03; border-color: #806604; color: #fff3cd; }
+         .alert-danger { background-color: #58151c; border-color: #842029; color: #f8d7da; }
+
+
+        /* --- Utility --- */
+        .text-center { text-align: center !important; }
+        .mb-3 { margin-bottom: 1rem !important; }
+        .mb-4 { margin-bottom: 1.5rem !important; }
+
+        /* --- Notification Styles --- */
+        .alert-primary {
+            background-color: #0d2249;
+            border-color: #0d6efd;
+            color: #cfe2ff;
+            margin-bottom: 30px;
+        }
+
+        .alert-primary .alert-heading {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .list-group-item {
+            margin-bottom: 10px;
+            border-radius: 6px !important;
+        }
+
+        .list-group-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .list-group-item.bg-dark {
+            background-color: var(--dark-surface) !important;
+        }
+
+        .list-group-item .text-muted {
+            color: var(--dark-text-secondary) !important;
+        }
+
+        .btn-success {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .btn-success:hover {
+            background-color: #157347;
+            border-color: #146c43;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b;
+            border-color: #b02a37;
+        }
+
+        .table-dark th, .table-dark td{
+            border: 1px solid #40454f;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+                <i class="fas fa-shield-alt me-2"></i>Sports Team Manager
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto align-items-center">
+                    <span class="navbar-text me-3">
+                        Hello, {{ user.username }}
+                    </span>
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('logout') }}">
+                       <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content container mt-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if is_new_user %}
+            <div class="welcome-container">
+                <h2>Welcome to Sports Team Manager!</h2>
+                <p class="lead mb-4">Thanks for joining us. Get started by creating your first team.</p>
+                <a href="{{ url_for('add_team_members') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-users me-2"></i>Create Your First Team
+                </a>
+            </div>
+        {% else %}
+            <div class="d-flex justify-content-between align-items-center section-header">
+                <h2>Your Teams</h2>
+                <div>
+                    <a href="{{ url_for('add_team_members') }}" class="btn btn-primary me-2">
+                        <i class="fas fa-plus me-1"></i> Add New Team
+                    </a>
+                    <a href="{{ url_for('match_request') }}" class="btn btn-success">
+                        <i class="fas fa-flag-checkered me-1"></i> Match Request
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                {% for team in teams %}
+                    <div class="col-md-6 col-lg-4 team-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <div class="team-logo-container">
+                                        {% if team.team_logo %}
+                                            <img src="{{ url_for('static', filename='uploads/' + team.team_logo) }}" alt="{{ team.team_name }} Logo" class="team-logo">
+                                        {% else %}
+                                            <div class="team-logo-placeholder">
+                                                <span>No Logo</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <h5 class="card-title text-center">{{ team.team_name }}</h5>
+                                    <p class="card-text text-center">Captain: {{ team.captain_name }}</p>
+                                    <p class="card-text text-center mb-3">Members: {{ team.members|length }}</p>
+                                    <div class="member-avatars-container mb-4">
+                                        {% for member in team.members[:5] %}
+                                            {% if member.profile_pic %}
+                                                <img src="{{ url_for('static', filename='uploads/' + member.profile_pic) }}" alt="{{ member.name }}" class="member-avatar" title="{{ member.name }}">
+                                            {% else %}
+                                                <div class="member-avatar-initials" title="{{ member.name }}">
+                                                    {{ member.name[0]|upper if member.name else '?' }}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if team.members|length > 5 %}
+                                            <span class="member-avatar-more">+{{ team.members|length - 5 }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-actions mt-auto">
+                                    <a href="{{ url_for('view_team', team_id=team._id) }}" class="btn btn-sm btn-outline-info">
+                                       <i class="fas fa-eye me-1"></i> View
+                                    </a>
+                                    <a href="{{ url_for('edit_team', team_id=team._id) }}" class="btn btn-sm btn-outline-primary">
+                                       <i class="fas fa-edit me-1"></i> Edit
+                                    </a>
+                                    <a href="{{ url_for('delete_team', team_id=team._id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this team \'{{ team.team_name }}\'?')">
+                                       <i class="fas fa-trash-alt me-1"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if pending_requests and pending_requests|length > 0 %}
+                <div class="alert alert-primary" role="alert">
+                    <h4 class="alert-heading mb-3"><i class="fas fa-bell me-2"></i>Match Request Notifications</h4>
+                    <div class="list-group">
+                        {% for request in pending_requests %}
+                            <div class="list-group-item list-group-item-action bg-dark border-secondary d-flex justify-content-between align-items-center p-3">
+                                <div>
+                                    <strong>{{ request.team_name }}</strong> has requested a match with your team <strong>{{ request.opponent_name }}</strong>
+                                    <small class="d-block text-muted mt-1">Requested on {{ request.created_at.strftime('%Y-%m-%d at %H:%M') }}</small>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('respond_to_match_request', request_id=request._id, action='accept') }}" 
+                                    class="btn btn-success btn-sm" 
+                                    onclick="return confirm('Accept match request from {{ request.team_name }}?')">
+                                        <i class="fas fa-check me-1"></i> Accept
+                                    </a>
+                                    <a href="{{ url_for('respond_to_match_request', request_id=request._id, action='reject') }}" 
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Reject match request from {{ request.team_name }}?')">
+                                        <i class="fas fa-times me-1"></i> Reject
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if match_requests and match_requests|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Your Team</th>
+                                <th class="text-center">VS</th>
+                                <th>Opponent</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in match_requests %}
+                                <tr>
+                                    <td>{{ request.team_name }}</td>
+                                    <td class="text-center"><span class="badge bg-danger">VS</span></td>
+                                    <td>{{ request.opponent_name }}</td>
+                                    <td>
+                                        {% if request.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% elif request.status == 'accepted' %}
+                                            <span class="badge bg-success">Accepted</span>
+                                        {% elif request.status == 'rejected' %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ request.created_at.strftime('%Y-%m-%d') }}</td>
+                                    <td class="text-end">
+                                        {% if request.status == 'pending' %}
+                                            <a href="{{ url_for('cancel_match_request', request_id=request._id) }}" 
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to cancel this match request?')">
+                                                <i class="fas fa-times me-1"></i> Cancel
+                                            </a>
+                                        {% else %}
+                                            <a href="#" class="btn btn-sm btn-outline-info">
+                                                <i class="fas fa-eye"></i> Details
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-flag-checkered"></i>
+                        </div>
+                        <h3>No match requests yet</h3>
+                        <p>You haven't made or received any match requests yet.</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <footer class="py-4"> 
+        <div class="container text-center">
+            <p class="mb-0">© {{ current_year }} Sports Team Manager. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

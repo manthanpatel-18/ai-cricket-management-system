@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Use team name in title -->
+    <title>{{ team.team_name }} - Team Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  <!-- Keep Chart.js CDN -->
+
+    <style>
+        :root {
+            --custom-primary-bg: #1a1a2e; /* Dark blue/purple */
+            --custom-secondary-bg: #24243e; /* Slightly lighter */
+            --custom-text-color: #e0e0e0; /* Light grey text */
+            --custom-accent-color: #00a65a; /* Green accent */
+            --custom-border-color: rgba(255, 255, 255, 0.15);
+            --custom-hover-bg: #3a3a5a;
+            --custom-placeholder-bg: #4e4e6a;
+            --custom-placeholder-text: #a0a0c0;
+        }
+
+        [data-bs-theme="dark"] {
+            --bs-body-bg: var(--custom-primary-bg);
+            --bs-body-color: var(--custom-text-color);
+            --bs-secondary-color-rgb: 0, 166, 90; /* Use RGB for opacity control if needed */
+            --bs-border-color: var(--custom-border-color);
+            --bs-card-bg: var(--custom-secondary-bg);
+            --bs-modal-bg: var(--custom-secondary-bg);
+            --bs-list-group-bg: var(--custom-secondary-bg);
+            --bs-list-group-border-color: var(--custom-border-color);
+            --bs-table-bg: var(--custom-secondary-bg);
+            --bs-table-striped-bg: #2a2a4a; /* Slightly different stripe */
+            --bs-table-hover-bg: var(--custom-hover-bg);
+            --bs-primary-rgb: 0, 166, 90; /* Override BS primary with our accent */
+            --bs-primary: var(--custom-accent-color);
+            --bs-link-color: var(--custom-accent-color);
+            --bs-link-hover-color: #00d473; /* Lighter green for hover */
+            --bs-list-group-color: var(--custom-text-color); /* Ensure list text is visible */
+             /* Ensure list group items match modal bg */
+            --bs-list-group-item-bg: var(--custom-secondary-bg);
+             /* Hover for list items */
+            --bs-list-group-action-hover-bg: var(--custom-hover-bg);
+        }
+
+        body {
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+        }
+
+        /* Enhanced Card Styles */
+        .card {
+            border: 1px solid var(--custom-border-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            background-color: var(--bs-card-bg); /* Explicitly set card bg */
+        }
+
+        .team-logo {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: contain;
+            border: 1px solid var(--custom-border-color);
+            background-color: var(--custom-placeholder-bg);
+        }
+
+        .team-logo-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: var(--bs-border-radius);
+            background-color: var(--custom-placeholder-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--custom-placeholder-text);
+            border: 1px solid var(--custom-border-color);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .member-card {
+            margin-bottom: 25px;
+        }
+         .member-card .card:hover {
+             transform: translateY(-5px);
+             box-shadow: 0 8px 15px rgba(0, 166, 90, 0.1);
+         }
+
+        .member-profile-pic {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--custom-border-color);
+        }
+
+        .profile-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--custom-placeholder-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--custom-placeholder-text);
+            font-weight: bold;
+            border: 1px solid var(--custom-border-color);
+        }
+
+        /* Section Title Enhancement */
+        .section-title {
+            color: var(--bs-body-color);
+            margin-bottom: 30px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--custom-accent-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* Enhanced Match History Table Styles */
+        .match-history-table {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--custom-border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .match-history-table thead {
+            background-color: rgba(0, 166, 90, 0.15);
+            border-bottom: 2px solid var(--custom-accent-color);
+        }
+
+        .match-history-table th {
+            color: var(--bs-body-color);
+            font-weight: 600;
+            padding: 12px 15px;
+            border-color: var(--custom-border-color) !important;
+        }
+
+        .match-history-table td {
+            border-color: var(--custom-border-color) !important;
+            vertical-align: middle;
+            padding: 12px 15px;
+        }
+
+        .match-row {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .table-dark.table-hover > tbody > tr:hover > * {
+             background-color: var(--custom-hover-bg);
+             color: #ffffff;
+        }
+
+        /* Badge Styling */
+        .badge {
+            padding: 6px 12px;
+            font-weight: 500;
+            font-size: 0.85em;
+            border-radius: 4px;
+        }
+        .badge.bg-primary { background-color: #0d6efd !important; }
+        .badge.bg-secondary { background-color: #6c757d !important; }
+
+        /* Enhanced Modal Styles */
+        .modal-content {
+             border: 1px solid var(--custom-border-color);
+             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+             background-color: var(--bs-modal-bg); /* Explicitly set modal bg */
+        }
+        .modal-header {
+            border-bottom: 1px solid var(--custom-border-color);
+            background-color: rgba(0, 166, 90, 0.1);
+        }
+        .modal-title {
+            font-weight: 600;
+        }
+        .modal-footer {
+            border-top: 1px solid var(--custom-border-color);
+        }
+
+        /* Specific styles for Scouting Modal List */
+        #scoutingResultsModal .list-group-item {
+            background-color: transparent; /* Match modal background */
+            border-color: var(--custom-border-color); /* Use theme border color */
+            color: var(--bs-list-group-color); /* Use theme list text color */
+        }
+         #scoutingResultsModal .list-group-item .text-muted {
+             color: var(--custom-placeholder-text) !important; /* Make muted text visible */
+         }
+
+
+        .vs-badge {
+            background-color: var(--custom-accent-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin: 0 10px;
+        }
+        .match-details .team-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--bs-body-color);
+        }
+        .match-info p {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1em;
+        }
+        .match-info i.fa-fw {
+            color: var(--custom-accent-color);
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+         .match-info strong {
+             margin-right: 8px;
+             color: #b0b0d0;
+         }
+
+         /* Style for ALL chart containers in the modal */
+        .chart-container-modal {
+            position: relative;
+            width: 100%;
+            /* height is set inline for flexibility */
+            margin: 15px auto;
+        }
+        .player-achievement-card .card-header img.rounded-circle,
+        .player-achievement-card .card-header div.rounded-circle {
+             width: 40px;
+             height: 40px;
+             font-size: 1.2rem; /* Adjust font size for placeholder */
+        }
+        .player-achievement-card .small.text-muted {
+             font-size: 0.8em; /* Smaller labels */
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5 mb-5">
+        <div class="row mb-4">
+            <div class="col">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light mb-3"><i class="fas fa-arrow-left me-2"></i>Back to Dashboard</a>
+                <h1 class="display-5 fw-bold">Team Details</h1>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Team Info Card -->
+        <div class="card mb-5 shadow-sm">
+            <div class="card-body p-4">
+                 <div class="row align-items-center">
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        {% if team.team_logo %}
+                            <img src="{{ url_for('static', filename='uploads/' + team.team_logo) }}" alt="{{ team.team_name }}" class="team-logo img-thumbnail">
+                        {% else %}
+                            <div class="team-logo-placeholder img-thumbnail d-inline-block">
+                                <span>{{ team.team_name[0]|upper if team.team_name else '?' }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-9">
+                        <h2 class="card-title mb-3">{{ team.team_name }}</h2>
+                        <p class="lead mb-2"><i class="fas fa-user-crown me-2 text-warning"></i>Captain: {{ team.captain_name }}</p>
+                        <p><i class="fas fa-users me-2 text-info"></i>Total Members: {{ team.members|length }}</p>
+                        <div class="mt-4">
+                            {% if is_owner %}
+                                <a href="{{ url_for('edit_team', team_id=team._id) }}" class="btn btn-primary me-2"><i class="fas fa-edit me-1"></i> Edit Team</a>
+                                <a href="{{ url_for('delete_team', team_id=team._id) }}" class="btn btn-danger me-2" onclick="return confirm('Are you sure you want to delete this team? This action cannot be undone.')"><i class="fas fa-trash-alt me-1"></i> Delete Team</a>
+                                <!-- Scout Button - only for owners? Or maybe visible to all logged in? Let's make visible to all logged-in for now -->
+                            {% endif %}
+                             <button type="button" class="btn btn-success" id="scoutPlayersBtn"
+                                     data-bs-toggle="modal" data-bs-target="#scoutingResultsModal"
+                                     data-team-id="{{ team._id }}"> {# Pass team ID here #}
+                                <i class="fas fa-binoculars me-1"></i> Scout Eligible Players
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Members Section -->
+        <h3 class="section-title">Team Members</h3>
+        <div class="row">
+            {% if team.members %}
+                {% for member in team.members %}
+                    <div class="col-md-6 col-lg-4 member-card">
+                        <div class="card h-100">
+                            <div class="card-body text-center p-4">
+                                {% if member.profile_pic %}
+                                    <img src="{{ url_for('static', filename='uploads/' + member.profile_pic) }}" alt="{{ member.name }}" class="member-profile-pic mb-3">
+                                {% else %}
+                                    <div class="profile-placeholder mb-3 mx-auto">
+                                        {{ member.name[0]|upper if member.name else '?' }}
+                                    </div>
+                                {% endif %}
+                                <h5 class="card-title mt-2">{{ member.name }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col">
+                    <div class="alert alert-secondary">No members found for this team.</div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Match History Section -->
+        <div class="mt-5">
+            <h3 class="section-title">Match History</h3>
+            {% if match_history %}
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover match-history-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col"><i class="far fa-calendar-alt me-2"></i>Date</th>
+                                <th scope="col"><i class="fas fa-fist-raised me-2"></i>Opponent</th>
+                                <th scope="col"><i class="fas fa-user-tag me-2"></i>Role</th>
+                                <th scope="col"><i class="fas fa-flag-checkered me-2"></i>Status/Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for match in match_history %}
+                                <!-- Row triggers the details modal -->
+                                <tr class="match-row" data-bs-toggle="modal" data-bs-target="#matchHistoryModal{{ match._id }}">
+                                    <td>{{ match.match_date.strftime('%d %b %Y, %H:%M') }}</td>
+                                    <td>{{ match.opponent_name | default('Unknown') }}</td>
+                                    <td>
+                                        {% if match.is_challenger %}
+                                            <span class="badge bg-info text-dark">Challenger</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Opponent</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if match.status == 'accepted' %}
+                                            <span class="badge bg-success">Accepted</span>
+                                        {% elif match.status == 'rejected' %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% elif match.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% elif match.status == 'completed' %}
+                                             {% if match.outcome == 'Win' %}
+                                                 <span class="badge bg-success"><i class="fas fa-trophy me-1"></i> Win</span>
+                                             {% elif match.outcome == 'Loss' %}
+                                                 <span class="badge bg-danger"><i class="fas fa-times me-1"></i> Loss</span>
+                                             {% elif match.outcome == 'Draw' %}
+                                                 <span class="badge bg-secondary"><i class="fas fa-equals me-1"></i> Draw</span>
+                                             {% else %}
+                                                  <span class="badge bg-dark">Completed</span>
+                                             {% endif %}
+                                        {% else %}
+                                             <span class="badge bg-dark">{{ match.status|capitalize }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <!-- Modal for Match Detail -->
+                                <div class="modal fade" id="matchHistoryModal{{ match._id }}" tabindex="-1" aria-labelledby="matchHistoryModalLabel{{ match._id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="matchHistoryModalLabel{{ match._id }}">
+                                                    <i class="fas fa-scroll me-2"></i> Match Details
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <div class="match-details">
+                                                     {# Use the names determined in the backend logic #}
+                                                    {% set team1_name = match.this_team_name %}
+                                                    {% set team2_name = match.opponent_name %}
+                                                    <h6 class="text-center mb-4">
+                                                        <span class="team-name">{{ team1_name }}</span>
+                                                        <span class="vs-badge mx-3">VS</span>
+                                                        <span class="team-name">{{ team2_name }}</span>
+                                                    </h6>
+                                                    <div class="match-info mt-4">
+                                                        <p><i class="far fa-calendar-alt fa-fw"></i><strong>Date:</strong> {{ match.match_date.strftime('%A, %d %B %Y, %I:%M %p %Z') }}</p>
+                                                        {# Display scores if match is completed #}
+                                                        {% if match.status == 'completed' %}
+                                                        <hr class="my-3" style="border-color: var(--custom-border-color);">
+                                                         <p><i class="fas fa-flag-checkered fa-fw"></i><strong>Result:</strong>
+                                                             {% if match.outcome == 'Win' %}<span class="ms-2 badge bg-success">You Won</span>
+                                                             {% elif match.outcome == 'Loss' %}<span class="ms-2 badge bg-danger">You Lost</span>
+                                                             {% elif match.outcome == 'Draw' %}<span class="ms-2 badge bg-secondary">Draw</span>
+                                                             {% else %}<span class="ms-2 badge bg-dark">Completed</span>
+                                                             {% endif %}
+                                                         </p>
+                                                          <p><i class="fas fa-running fa-fw"></i><strong>Your Score:</strong> {{ match.team_score.get('runs', 'N/A') }} / {{ match.team_score.get('wickets', 'N/A') }} (Overs: {{ match.team_score.get('overs', 'N/A') }})</p>
+                                                          <p><i class="fas fa-shield-alt fa-fw"></i><strong>Opponent Score:</strong> {{ match.opponent_score.get('runs', 'N/A') }} / {{ match.opponent_score.get('wickets', 'N/A') }} (Overs: {{ match.opponent_score.get('overs', 'N/A') }})</p>
+                                                          <hr class="my-3" style="border-color: var(--custom-border-color);">
+                                                        {% endif %}
+                                                        <p><i class="fas fa-user-check fa-fw"></i><strong>Challenger:</strong> {{ match.team_name if match.is_challenger else match.opponent_name }}</p> {# Original challenger #}
+                                                        <p><i class="fas fa-user-shield fa-fw"></i><strong>Opponent:</strong> {{ match.opponent_name if match.is_challenger else match.team_name }}</p> {# Original opponent #}
+                                                        <hr class="my-3" style="border-color: var(--custom-border-color);">
+                                                        <p>
+                                                            <i class="fas {% if match.status == 'accepted' %}fa-check-circle text-success{% elif match.status == 'rejected' %}fa-times-circle text-danger{% elif match.status == 'pending' %}fa-question-circle text-warning{% else %}fa-flag-checkered text-info{% endif %} fa-fw"></i>
+                                                            <strong>Status:</strong>
+                                                            <span class="ms-2 badge {% if match.status == 'accepted' %}bg-success{% elif match.status == 'rejected' %}bg-danger{% elif match.status == 'pending' %}bg-warning text-dark{% else %}bg-info{% endif %}">
+                                                                {{ match.status|capitalize }}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                {# Show analytics only for completed/accepted matches? Your choice #}
+                                                {% if match.status in ['accepted', 'completed'] %}
+                                                <button type="button" class="btn btn-info view-analytics-btn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#analyticsModal"
+                                                        data-team1-name="{{ team1_name }}"
+                                                        data-team2-name="{{ team2_name }}"
+                                                        data-match-id="{{ match._id }}">
+                                                    <i class="fas fa-chart-line me-1"></i> View Analytics
+                                                </button>
+                                                {% endif %}
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i> This team has no match history recorded yet.
+                </div>
+            {% endif %}
+        </div> <!-- End Match History Section -->
+
+        <!-- Player Achievements Section -->
+        <div class="mt-5">
+             <div class="d-flex justify-content-between align-items-center mb-3">
+                 <h3 class="section-title mb-0 pb-0 border-0">Player Achievements</h3>
+                 {% if is_owner %}
+                 <a href="{{ url_for('team_achievements', team_id=team._id) }}" class="btn btn-primary">
+                     <i class="fas fa-edit me-1"></i> Edit Achievements
+                 </a>
+                 {% endif %}
+             </div>
+
+            <div class="row mt-4">
+                {# Use the 'players' variable passed from the Flask route which includes stats #}
+                {% if players %}
+                    {% for player in players %}
+                    <div class="col-md-6 col-lg-4 mb-4 player-achievement-card">
+                        <div class="card h-100">
+                            <div class="card-header d-flex align-items-center">
+                                {% if player.profile_pic %}
+                                <img src="{{ url_for('static', filename='uploads/' + player.profile_pic) }}"
+                                    alt="{{ player.name }}" class="rounded-circle me-2">
+                                {% else %}
+                                <div class="rounded-circle bg-secondary me-2 d-flex align-items-center justify-content-center text-white fw-bold">
+                                    {{ player.name[0]|upper if player.name else '?'}}
+                                </div>
+                                {% endif %}
+                                <h5 class="mb-0 card-title">{{ player.name }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-4 border-end border-secondary-subtle">
+                                        <div class="h4 mb-1">{{ player.runs | default(0) }}</div>
+                                        <div class="small text-muted">Runs</div>
+                                    </div>
+                                    <div class="col-4 border-end border-secondary-subtle">
+                                        <div class="h4 mb-1">{{ player.wickets | default(0) }}</div>
+                                        <div class="small text-muted">Wickets</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="h4 mb-1">{{ player.matches_played | default(0) }}</div>
+                                        <div class="small text-muted">Matches</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col">
+                         <div class="alert alert-secondary">
+                           {% if team.members %}
+                               Player achievement data not recorded yet. {% if is_owner %}<a href="{{ url_for('team_achievements', team_id=team._id) }}">Add Achievements</a>{% endif %}
+                           {% else %}
+                               No members added to this team yet.
+                           {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div> <!-- End Container -->
+
+    <!-- *** Analytics Chart Modal *** -->
+    <div class="modal fade" id="analyticsModal" tabindex="-1" aria-labelledby="analyticsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="analyticsModalLabel"><i class="fas fa-chart-pie me-2"></i> Match Analytics</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center lead mb-4"><strong>Match:</strong> <span id="analyticsMatchTitle">Team A vs Team B</span></p>
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                             <h6 class="text-center text-muted mb-2">Score Progression (Bar)</h6>
+                             <div class="chart-container-modal" style="height: 45vh; min-height: 300px;"> <canvas id="scoreChartModal"></canvas> </div>
+                        </div>
+                        <div class="col-lg-6 mb-4">
+                             <h6 class="text-center text-muted mb-2">Score Progression (Line)</h6>
+                             <div class="chart-container-modal" style="height: 45vh; min-height: 300px;"> <canvas id="lineChartModal"></canvas> </div>
+                        </div>
+                    </div>
+                     <div class="row justify-content-center mt-3">
+                        <div class="col-md-8 col-lg-5">
+                            <h6 class="text-center text-muted mb-2">Total Score Comparison</h6>
+                            <div class="chart-container-modal" style="height: 40vh; min-height: 280px;"> <canvas id="pieChartModal"></canvas> </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close Analytics</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- *** END: Analytics Chart Modal *** -->
+
+     <!-- *** Scouting Results Modal *** -->
+    <div class="modal fade" id="scoutingResultsModal" tabindex="-1" aria-labelledby="scoutingResultsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scoutingResultsModalLabel"><i class="fas fa-medal me-2"></i> Top Eligible Players (Scouting)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-4">Based on player achievements (runs), here are the top potential players not currently on this team:</p>
+                    <div id="scoutingResultsList">
+                         <!-- Initial loading state -->
+                         <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status"> <span class="visually-hidden">Loading...</span> </div>
+                            <p class="mt-2">Analyzing scouting data...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- *** END: Scouting Results Modal *** -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Analytics Chart Modal Logic ---
+            const analyticsModalElement = document.getElementById('analyticsModal');
+            if (analyticsModalElement) {
+                const analyticsModal = bootstrap.Modal.getOrCreateInstance(analyticsModalElement);
+                const barChartCanvasCtx = document.getElementById('scoreChartModal')?.getContext('2d');
+                const lineChartCanvasCtx = document.getElementById('lineChartModal')?.getContext('2d');
+                const pieChartCanvasCtx = document.getElementById('pieChartModal')?.getContext('2d');
+                const analyticsMatchTitleElement = document.getElementById('analyticsMatchTitle');
+
+                if (!barChartCanvasCtx || !lineChartCanvasCtx || !pieChartCanvasCtx || !analyticsMatchTitleElement) {
+                     console.error("One or more chart canvas/title elements inside the analytics modal were not found!");
+                } else {
+                    let modalBarChartInstance = null;
+                    let modalLineChartInstance = null;
+                    let modalPieChartInstance = null;
+
+                    function getPieColors(count) {
+                         const colors = ['rgba(0, 123, 255, 0.8)', 'rgba(255, 159, 64, 0.8)', 'rgba(40, 167, 69, 0.8)', 'rgba(220, 53, 69, 0.8)', 'rgba(23, 162, 184, 0.8)', 'rgba(255, 193, 7, 0.8)'];
+                         const resultColors = [];
+                         for (let i = 0; i < count; i++) { resultColors.push(colors[i % colors.length]); }
+                         return resultColors;
+                    }
+
+                    function destroyAnalyticsCharts() {
+                         if (modalBarChartInstance) { modalBarChartInstance.destroy(); modalBarChartInstance = null; }
+                         if (modalLineChartInstance) { modalLineChartInstance.destroy(); modalLineChartInstance = null; }
+                         if (modalPieChartInstance) { modalPieChartInstance.destroy(); modalPieChartInstance = null; }
+                    }
+
+                    document.querySelectorAll('.view-analytics-btn').forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            const btn = event.currentTarget;
+                            const team1Name = btn.dataset.team1Name || 'Team 1';
+                            const team2Name = btn.dataset.team2Name || 'Team 2';
+                            const matchId = btn.dataset.matchId; // Currently unused, but good to have for future data fetching
+                            const numOvers = 10; // Example number of overs for random data
+
+                            analyticsMatchTitleElement.textContent = `${team1Name} vs ${team2Name}`;
+
+                            // --- Generate Sample Data (Replace with actual data fetching for the specific match if needed) ---
+                            const labels = Array.from({ length: numOvers }, (_, i) => `Over ${i + 1}`);
+                            // You would ideally fetch real scores based on matchId if available
+                            const team1Scores = Array.from({ length: numOvers }, () => Math.floor(Math.random() * 15) + 1);
+                            const team2Scores = Array.from({ length: numOvers }, () => Math.floor(Math.random() * 15) + 1);
+                            const totalTeam1Score = team1Scores.reduce((sum, score) => sum + score, 0);
+                            const totalTeam2Score = team2Scores.reduce((sum, score) => sum + score, 0);
+                            // --- End Sample Data ---
+
+                            destroyAnalyticsCharts(); // Destroy previous charts
+
+                            const commonBarLineOptions = {
+                                 responsive: true, maintainAspectRatio: false,
+                                 scales: {
+                                    y: { beginAtZero: true, title: { display: true, text: 'Runs per Over', color: 'var(--custom-text-color)' }, ticks: { color: 'var(--custom-text-color)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                                    x: { title: { display: true, text: 'Overs', color: 'var(--custom-text-color)' }, ticks: { color: 'var(--custom-text-color)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                                 },
+                                 plugins: { legend: { labels: { color: 'var(--custom-text-color)' } }, tooltip: { backgroundColor: 'rgba(0,0,0,0.7)', titleColor: '#fff', bodyColor: '#fff' } }
+                            };
+
+                            // Create Bar Chart
+                            try {
+                                modalBarChartInstance = new Chart(barChartCanvasCtx, {
+                                    type: 'bar',
+                                    data: { labels: labels, datasets: [{ label: team1Name, data: team1Scores, backgroundColor: 'rgba(0, 123, 255, 0.7)', borderColor: 'rgba(0, 123, 255, 1)', borderWidth: 1 }, { label: team2Name, data: team2Scores, backgroundColor: 'rgba(255, 159, 64, 0.7)', borderColor: 'rgba(255, 159, 64, 1)', borderWidth: 1 }] },
+                                    options: { ...commonBarLineOptions, plugins: { ...commonBarLineOptions.plugins, title: { display: true, text: 'Score Progression (Bar)', color: 'var(--custom-text-color)', font: { size: 16 } } } }
+                                });
+                            } catch (error) { console.error("Error creating Bar chart:", error); }
+
+                            // Create Line Chart
+                             try {
+                                modalLineChartInstance = new Chart(lineChartCanvasCtx, {
+                                    type: 'line',
+                                    data: { labels: labels, datasets: [{ label: team1Name, data: team1Scores, borderColor: 'rgba(0, 123, 255, 1)', backgroundColor: 'rgba(0, 123, 255, 0.1)', tension: 0.1, fill: true }, { label: team2Name, data: team2Scores, borderColor: 'rgba(255, 159, 64, 1)', backgroundColor: 'rgba(255, 159, 64, 0.1)', tension: 0.1, fill: true }] },
+                                     options: { ...commonBarLineOptions, plugins: { ...commonBarLineOptions.plugins, title: { display: true, text: 'Score Progression (Line)', color: 'var(--custom-text-color)', font: { size: 16 } } } }
+                                });
+                            } catch (error) { console.error("Error creating Line chart:", error); }
+
+                            // Create Pie Chart
+                            try {
+                                modalPieChartInstance = new Chart(pieChartCanvasCtx, {
+                                    type: 'pie',
+                                    data: { labels: [team1Name, team2Name], datasets: [{ label: 'Total Score', data: [totalTeam1Score, totalTeam2Score], backgroundColor: getPieColors(2), borderColor: 'var(--custom-secondary-bg)', borderWidth: 2, hoverOffset: 4 }] },
+                                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: 'var(--custom-text-color)' } }, title: { display: true, text: 'Total Score Comparison', color: 'var(--custom-text-color)', font: { size: 16 } }, tooltip: { backgroundColor: 'rgba(0,0,0,0.7)', titleColor: '#fff', bodyColor: '#fff', callbacks: { label: function(context) { let label = context.label || ''; if (label) { label += ': '; } const value = context.parsed; if (value !== null) { const total = context.dataset.data.reduce((sum, val) => sum + val, 0); const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0; label += `${value} Runs (${percentage}%)`; } return label; } } } } }
+                                });
+                             } catch (error) { console.error("Error creating Pie chart:", error); }
+                        });
+                    });
+
+                    analyticsModalElement.addEventListener('hidden.bs.modal', () => {
+                        destroyAnalyticsCharts();
+                    });
+                }
+            } else {
+                console.warn("Analytics modal element not found! Analytics features disabled.");
+            }
+
+
+            // --- Scouting Modal Logic ---
+            const scoutButton = document.getElementById('scoutPlayersBtn');
+            const scoutingModalElement = document.getElementById('scoutingResultsModal');
+            const scoutingResultsListElement = document.getElementById('scoutingResultsList');
+
+            if (scoutButton && scoutingModalElement && scoutingResultsListElement) {
+                const initialLoadingHTML = `
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing scouting data...</p>
+                    </div>`;
+                 const errorHTML = '<div class="alert alert-danger text-center">Could not load scouting data. Please try again later.</div>';
+
+
+                scoutButton.addEventListener('click', (event) => {
+                    const teamId = event.currentTarget.dataset.teamId; // Get team ID from button
+                    if (!teamId) {
+                        console.error("Team ID not found on scout button.");
+                        scoutingResultsListElement.innerHTML = '<div class="alert alert-danger text-center">Error: Team ID missing.</div>';
+                        return;
+                    }
+                    fetchAndDisplayScoutedPlayers(teamId); // Call fetch function
+                });
+
+                scoutingModalElement.addEventListener('show.bs.modal', () => {
+                    // Ensure loading state is shown when modal is about to be shown
+                    // Button click now handles loading state via fetchAndDisplayScoutedPlayers
+                });
+
+                scoutingModalElement.addEventListener('hidden.bs.modal', () => {
+                    // Reset to loading state when hidden (optional, or just clear)
+                    // scoutingResultsListElement.innerHTML = initialLoadingHTML;
+                    scoutingResultsListElement.innerHTML = ''; // Clear content when hidden
+                });
+
+            } else {
+                console.warn("Scouting button or modal elements not found! Scouting feature disabled.");
+            }
+
+            async function fetchAndDisplayScoutedPlayers(teamId) {
+                 scoutingResultsListElement.innerHTML = `
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status"> <span class="visually-hidden">Loading...</span> </div>
+                        <p class="mt-2">Analyzing scouting data...</p>
+                    </div>`; // Show loading
+
+                try {
+                    const response = await fetch(`/scout_players/${teamId}`);
+                    if (!response.ok) {
+                        // Handle HTTP errors (like 404, 500)
+                        console.error("Scouting fetch failed:", response.status, response.statusText);
+                        const errorData = await response.json().catch(() => ({})); // Try to get error message
+                        scoutingResultsListElement.innerHTML = `<div class="alert alert-danger text-center">Error: ${errorData.error || response.statusText}</div>`;
+                        return;
+                    }
+                    const topPlayers = await response.json();
+                    populateScoutingList(topPlayers); // Display fetched data
+
+                } catch (error) {
+                    // Handle network errors or JSON parsing errors
+                    console.error("Error fetching or processing scouting data:", error);
+                    scoutingResultsListElement.innerHTML = errorHTML;
+                }
+            }
+
+
+            function populateScoutingList(players) {
+                 scoutingResultsListElement.innerHTML = ''; // Clear loading/previous
+
+                 if (players && players.length > 0) {
+                    const listGroup = document.createElement('ul');
+                    listGroup.className = 'list-group list-group-flush'; // Flush looks better in modals
+
+                    players.forEach((player, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+                        // Basic profile picture handling
+                         let profilePicHTML = `<div class="rounded-circle bg-secondary me-3 d-flex align-items-center justify-content-center text-white fw-bold" style="width: 40px; height: 40px; font-size: 1.2rem;">${player.name ? player.name[0].toUpperCase() : '?'}</div>`;
+                         if (player.profile_pic) {
+                            // Assuming profile pics are in static/uploads
+                            const profilePicUrl = `/static/uploads/${player.profile_pic}`;
+                            profilePicHTML = `<img src="${profilePicUrl}" alt="${player.name}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">`;
+                         }
+
+
+                        li.innerHTML = `
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-secondary me-3" style="width: 2.8em; line-height: 2em;">#${index + 1}</span>
+                                ${profilePicHTML}
+                                <div>
+                                    <strong class="mb-0">${player.name || 'Unknown Player'}</strong><br>
+                                    <small class="text-muted">From: ${player.team_name || 'Unknown Team'} | Runs: ${player.runs}</small>
+                                     {# Add more stats if needed #}
+                                     {# <small class="text-muted">${player.role} - ${player.region}</small> #}
+                                </div>
+                            </div>
+                            <span class="badge bg-success rounded-pill fs-6" title="Scout Score (based on runs)">${player.scoutScore}</span>
+                        `;
+                        listGroup.appendChild(li);
+                    });
+                    scoutingResultsListElement.appendChild(listGroup);
+                 } else {
+                    scoutingResultsListElement.innerHTML = '<p class="text-center text-muted py-4">No eligible players found based on current scouting criteria.</p>';
+                 }
+            }
+
+        }); // End DOMContentLoaded
+    </script>
+</body>
+</html>

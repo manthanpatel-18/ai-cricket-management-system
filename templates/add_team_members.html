@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Team - Sports Team Manager (Dark)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Dark Theme Variables --- */
+        :root {
+            --dark-bg: #1a1d24; /* Main background */
+            --dark-surface: #272b33; /* Card/element background */
+            --dark-border: #40454f; /* Borders */
+            --dark-text-primary: #e0e0e0; /* Primary text */
+            --dark-text-secondary: #a0a0a0; /* Muted text */
+            --dark-text-headings: #ffffff; /* Headings */
+            --dark-primary-accent: #0d6efd; /* Keep Bootstrap primary */
+            --dark-secondary-accent: #6c757d; /* Bootstrap secondary */
+            --dark-danger-accent: #dc3545; /* Bootstrap danger */
+            --dark-shadow-color: rgba(0, 0, 0, 0.4); /* Darker shadow */
+            --dark-focus-ring: rgba(13, 110, 253, 0.35); /* Adjusted focus ring for dark */
+        }
+
+        /* --- General Styling --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--dark-text-primary);
+            padding-bottom: 50px;
+        }
+
+        /* --- Form Container Card --- */
+        .form-container-card {
+            background-color: var(--dark-surface);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--dark-shadow-color);
+            margin-top: 40px;
+            overflow: hidden;
+            border: 1px solid var(--dark-border); /* Add subtle border */
+        }
+
+        .form-container-card .card-header {
+            background-color: #212529; /* Darker header */
+            color: var(--dark-text-headings);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--dark-border);
+        }
+        .form-container-card .card-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        .form-container-card .card-body {
+            padding: 2rem 2.5rem;
+        }
+
+        /* --- Section Headings --- */
+        h3.section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-text-headings);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        /* --- Form Elements --- */
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: var(--dark-text-secondary); /* Use secondary text for labels */
+        }
+
+        .form-control {
+            border-radius: 6px;
+            background-color: var(--dark-bg); /* Slightly different bg for inputs */
+            border: 1px solid var(--dark-border);
+            color: var(--dark-text-primary);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-control:focus {
+            background-color: var(--dark-bg); /* Keep bg same on focus */
+            border-color: var(--dark-primary-accent);
+            box-shadow: 0 0 0 0.25rem var(--dark-focus-ring);
+            color: var(--dark-text-primary);
+        }
+        /* Style file inputs for dark theme */
+        .form-control[type="file"] {
+            padding: 0.375rem 0.75rem;
+        }
+        .form-control[type="file"]::file-selector-button {
+             background-color: var(--dark-secondary-accent);
+             color: var(--dark-text-headings);
+             border: 1px solid var(--dark-secondary-accent);
+             border-radius: 4px;
+             padding: 0.375rem 0.75rem;
+             transition: background-color .15s ease-in-out;
+        }
+         .form-control[type="file"]::file-selector-button:hover {
+             background-color: #5c636a; /* Slightly darker secondary */
+         }
+        .form-control[type="file"]:focus {
+           box-shadow: 0 0 0 0.25rem var(--dark-focus-ring); /* Add focus ring back */
+        }
+
+        .form-text {
+            color: var(--dark-text-secondary); /* Muted helper text */
+        }
+
+        /* Ensure required asterisk is visible */
+        .text-danger {
+            color: var(--dark-danger-accent) !important;
+        }
+
+
+        /* --- Member Input Group --- */
+        #members-container {
+            margin-bottom: 1rem;
+        }
+        .member-input-group {
+            background-color: var(--dark-bg); /* Match input background */
+            border: 1px solid var(--dark-border);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .member-input-group:hover {
+            background-color: #212529; /* Slightly darker hover */
+            border-color: #555c68;
+        }
+
+        .member-input-group .row {
+            align-items: flex-start;
+        }
+
+        /* --- Remove Member Button --- */
+        .remove-member {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            line-height: 1;
+            border-radius: 4px;
+            /* Use outline danger for better visibility */
+            color: var(--dark-danger-accent);
+            background-color: transparent;
+            border: 1px solid var(--dark-danger-accent);
+        }
+        .remove-member:hover {
+             background-color: rgba(220, 53, 69, 0.15); /* Subtle danger background on hover */
+             color: #ff6b7a; /* Lighter red on hover */
+        }
+
+        /* --- Action Buttons --- */
+        .action-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .action-buttons .btn {
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+
+        /* Primary button */
+        .action-buttons .btn-primary {
+             background-color: var(--dark-primary-accent);
+             border-color: var(--dark-primary-accent);
+             color: white;
+        }
+         .action-buttons .btn-primary:hover {
+             opacity: 0.9;
+         }
+
+        /* Outline secondary button (Cancel) */
+        .action-buttons .btn-outline-secondary {
+             color: var(--dark-text-secondary);
+             border-color: var(--dark-text-secondary);
+        }
+         .action-buttons .btn-outline-secondary:hover {
+             color: var(--dark-text-primary);
+             background-color: var(--dark-secondary-accent);
+             border-color: var(--dark-secondary-accent);
+         }
+
+
+        /* Add member button (Outline primary) */
+        #add-member {
+            font-weight: 500;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            color: var(--dark-primary-accent);
+            border-color: var(--dark-primary-accent);
+        }
+         #add-member:hover {
+             color: white;
+             background-color: var(--dark-primary-accent);
+             border-color: var(--dark-primary-accent);
+             opacity: 0.9;
+         }
+
+
+         /* --- Alerts --- */
+         .alert {
+            border-radius: 6px;
+            color: var(--dark-text-primary); /* Base text color */
+            background-color: var(--dark-surface); /* Base background */
+            border: 1px solid var(--dark-border); /* Base border */
+         }
+         .alert .btn-close {
+              filter: invert(1) grayscale(100%) brightness(200%); /* Make close visible */
+         }
+         /* Specific alert type backgrounds/colors */
+         .alert-info { background-color: #052c65; border-color: #073b8a; color: #cfe2ff; }
+         .alert-success { background-color: #0a3622; border-color: #0f5132; color: #d1e7dd; }
+         .alert-warning { background-color: #332701; border-color: #664d03; color: #fff3cd; } /* Adjusted warning */
+         .alert-danger { background-color: #58151c; border-color: #842029; color: #f8d7da; }
+
+         /* --- Separator --- */
+         hr {
+             border-color: var(--dark-border); /* Dark hr */
+         }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+
+                <div class="form-container-card">
+                    <div class="card-header">
+                        <h1><i class="fas fa-users-cog me-2"></i>Add New Team</h1>
+                    </div>
+                    <div class="card-body">
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <!-- Alert styles adjusted in CSS -->
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="POST" enctype="multipart/form-data">
+                            <h3 class="section-title">Team Details</h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="team_name" class="form-label">Team Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="team_name" name="team_name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="captain_name" class="form-label">Captain Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="captain_name" name="captain_name" required>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label for="team_logo" class="form-label">Team Logo</label>
+                                <input type="file" class="form-control" id="team_logo" name="team_logo" accept="image/*">
+                                <div class="form-text">Optional. Recommended size: 200x200px. Max 2MB.</div>
+                            </div>
+
+                            <h3 class="section-title">Team Members</h3>
+                            <div id="members-container">
+                                <!-- Initial Member -->
+                                <div class="member-input-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Member Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="member_names[]" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Profile Picture</label>
+                                                <input type="file" class="form-control" name="member_profile_pic_0" accept="image/*">
+                                                <div class="form-text">Optional.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- No remove button for the first member -->
+                                </div>
+                                <!-- Dynamic members will be added here -->
+                            </div>
+
+                             <!-- Add Member button styled via CSS -->
+                            <button type="button" class="btn btn-outline-primary mb-3" id="add-member">
+                                <i class="fas fa-plus me-1"></i> Add Another Member
+                            </button>
+
+                            <hr class="my-4">
+
+                            <!-- Action buttons styled via CSS -->
+                            <div class="action-buttons">
+                                <button type="submit" class="btn btn-primary">
+                                   <i class="fas fa-save me-1"></i> Save Team
+                                </button>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                                   <i class="fas fa-times me-1"></i> Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let memberCount = 1; // Start count for subsequent members
+            const container = document.getElementById('members-container');
+
+            document.getElementById('add-member').addEventListener('click', function() {
+                const newMemberGroup = document.createElement('div');
+                newMemberGroup.className = 'member-input-group'; // Use the styled class
+
+                const fileInputName = `member_profile_pic_${memberCount}`;
+
+                newMemberGroup.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Member Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="member_names[]" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Profile Picture</label>
+                                <input type="file" class="form-control" name="${fileInputName}" accept="image/*">
+                                <div class="form-text">Optional.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm remove-member" title="Remove Member">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+
+                container.appendChild(newMemberGroup);
+
+                const removeButton = newMemberGroup.querySelector('.remove-member');
+                if (removeButton) {
+                    removeButton.addEventListener('click', function() {
+                        container.removeChild(newMemberGroup);
+                    });
+                }
+
+                memberCount++; // Increment count for the next member
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

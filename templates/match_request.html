@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+    <title>Create Match Request - Sports Team Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Dark Theme Variables --- */
+        :root {
+            --dark-bg: #1a1d24;
+            --dark-surface: #272b33;
+            --dark-border: #40454f;
+            --dark-text-primary: #e0e0e0;
+            --dark-text-secondary: #a0a0a0;
+            --dark-text-headings: #ffffff;
+            --dark-primary-accent: #0d6efd;
+            --dark-shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- Sticky Footer Setup --- */
+        html {
+            height: 100%;
+        }
+        body {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--dark-text-primary);
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+
+        /* --- Form Styling --- */
+        .form-card {
+            background-color: var(--dark-surface);
+            border-radius: 10px;
+            border: 1px solid var(--dark-border);
+            box-shadow: 0 4px 8px var(--dark-shadow-color);
+        }
+        .form-control, .form-select {
+            background-color: #2c3038;
+            border: 1px solid var(--dark-border);
+            color: var(--dark-text-primary);
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #2c3038;
+            border-color: var(--dark-primary-accent);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            color: var(--dark-text-primary);
+        }
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a0a0a0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        }
+        .form-label {
+            color: var(--dark-text-secondary);
+            font-weight: 500;
+        }
+        .section-title {
+            color: var(--dark-text-headings);
+            font-weight: 600;
+            border-bottom: 1px solid var(--dark-border);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .vs-badge {
+            background-color: #dc3545;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 15px 0;
+        }
+
+        /* --- Navbar and Footer --- */
+        .navbar {
+            box-shadow: 0 2px 4px var(--dark-shadow-color);
+            flex-shrink: 0;
+        }
+        footer {
+            background-color: #212529;
+            padding: 25px 0;
+            border-top: 1px solid var(--dark-border);
+            flex-shrink: 0;
+        }
+        footer p {
+            margin-bottom: 0;
+            color: var(--dark-text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+                <i class="fas fa-shield-alt me-2"></i>Sports Team Manager
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto align-items-center">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a class="btn btn-outline-light btn-sm ms-3" href="{{ url_for('logout') }}">
+                       <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content container mt-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-card p-4 p-md-5">
+                    <h2 class="section-title text-center">Create Match Request</h2>
+                    
+                    {% if user_teams and other_teams %}
+                        <form method="POST" action="{{ url_for('match_request') }}">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="mb-4">
+                                        <label for="team_id" class="form-label">Your Team</label>
+                                        <select class="form-select" id="team_id" name="team_id" required>
+                                            <option value="" selected disabled>Select your team</option>
+                                            {% for team in user_teams %}
+                                            <option value="{{ team._id }}">{{ team.team_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                    <div class="vs-badge">VS</div>
+                                </div>
+                                
+                                <div class="col-md-5">
+                                    <div class="mb-4">
+                                        <label for="opponent_id" class="form-label">Opponent Team</label>
+                                        <select class="form-select" id="opponent_id" name="opponent_id" required>
+                                            <option value="" selected disabled>Select opponent</option>
+                                            {% for team in other_teams %}
+                                            <option value="{{ team._id }}">{{ team.team_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 col-md-6 mx-auto mt-4">
+                                <button type="submit" class="btn btn-primary py-2">
+                                    <i class="fas fa-flag-checkered me-2"></i>Create Match Request
+                                </button>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary py-2">Cancel</a>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-warning" role="alert">
+                            {% if not user_teams %}
+                                <p>You don't have any teams yet. Please create a team first.</p>
+                                <a href="{{ url_for('add_team_members') }}" class="btn btn-primary">Create Team</a>
+                            {% elif not other_teams %}
+                                <p>There are no other teams available to challenge. Please check back later.</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© {{ current_year }} Sports Team Manager. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

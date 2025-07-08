@@ -1,0 +1,281 @@
+{% block title %}Team Achievements{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-light mb-4">{{ team.team_name }} - Team Achievements</h2>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: rgba(51, 51, 51, 0.95);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 35px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            background: linear-gradient(145deg, #2a2a3a, #1f1f2e);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            background: linear-gradient(145deg, #323248, #282838);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .player-avatar {
+            width: 70px;
+            height: 70px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .player-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .player-avatar img:hover {
+            transform: scale(1.1);
+        }
+
+        .player-initials {
+            font-size: 28px;
+            height: 100%;
+            background: linear-gradient(135deg, #00bcd4, #2196f3);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #00bcd4;
+            margin-bottom: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            background: rgba(33, 150, 243, 0.1);
+            border: 1px solid rgba(33, 150, 243, 0.2);
+            border-radius: 10px;
+            padding: 15px 20px;
+            color: #00bcd4;
+        }
+
+        .card-text {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-text span {
+            font-weight: 600;
+            color: #00bcd4;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .col-md-4 {
+                margin-bottom: 20px;
+            }
+            
+            .card-header {
+                padding: 15px;
+            }
+            
+            .player-avatar {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+            border-radius: 4px;
+        }
+    </style>
+
+    {% if is_owner %}
+        <form method="POST" action="{{ url_for('team_achievements', team_id=team._id) }}">
+            <div class="row">
+                {% for player in players %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                <div class="player-avatar">
+                                    {% if player.profile_pic %}
+                                        <img src="{{ url_for('static', filename='uploads/' + player.profile_pic) }}" alt="{{ player.name }}" class="rounded-circle">
+                                    {% else %}
+                                        <span class="player-initials">{{ player.name[0]|upper }}</span>
+                                    {% endif %}
+                                </div>
+                                <h5 class="card-title mb-0 ms-2">{{ player.name }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="runs_{{ player.name }}" class="form-label">Runs</label>
+                                    <input type="number" class="form-control" id="runs_{{ player.name }}" name="runs_{{ player.name }}" value="{{ player.runs }}" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="wickets_{{ player.name }}" class="form-label">Wickets</label>
+                                    <input type="number" class="form-control" id="wickets_{{ player.name }}" name="wickets_{{ player.name }}" value="{{ player.wickets }}" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="matches_{{ player.name }}" class="form-label">Matches Played</label>
+                                    <input type="number" class="form-control" id="matches_{{ player.name }}" name="matches_{{ player.name }}" value="{{ player.matches_played }}" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-4 mb-5">
+                <button type="submit" class="btn btn-primary">Save Achievements</button>
+                <a href="{{ url_for('view_team', team_id=team._id) }}" class="btn btn-secondary ms-3">Back to Team</a>
+            </div>
+        </form>
+    {% else %}
+        <div class="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            You're viewing the team achievements page. Only team owners can update achievements.
+        </div>
+        <div class="row">
+            {% for player in players %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <div class="player-avatar">
+                                {% if player.profile_pic %}
+                                    <img src="{{ url_for('static', filename='uploads/' + player.profile_pic) }}" alt="{{ player.name }}" class="rounded-circle">
+                                {% else %}
+                                    <span class="player-initials">{{ player.name[0]|upper }}</span>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title mb-0 ms-2">{{ player.name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <span class="stat-label">Runs:</span>
+                                <span>{{ player.runs }}</span>
+                            </p>
+                            <p class="card-text">
+                                <span class="stat-label">Wickets:</span>
+                                <span>{{ player.wickets }}</span>
+                            </p>
+                            <p class="card-text">
+                                <span class="stat-label">Matches:</span>
+                                <span>{{ player.matches_played }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4 mb-5">
+            <a href="{{ url_for('view_team', team_id=team._id) }}" class="btn btn-secondary">Back to Team</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
