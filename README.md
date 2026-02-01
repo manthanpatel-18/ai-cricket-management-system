@@ -182,4 +182,4 @@ Screenshots and demo video are included in the LinkedIn walkthrough, showcasing:
 
 **Manthan Patel**
 - Linkedin: [Manthan Patel](https://www.linkedin.com/in/manthan-patel18)
-- Portfolio: [yourwebsite.com](https://manthan-portfolio-opal.vercel.app/)
+- Portfolio: [Manthan Patel](https://manthan-portfolio-opal.vercel.app/)
